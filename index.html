@@ -1,6 +1,37 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tapşırıqlar</h1>
+            <div class="input-section">
+                <input type="text" id="todo-input" placeholder="Yeni tapşırıq əlavə et...">
+                <button id="add-btn"><i class="fas fa-plus"></i></button>
+            </div>
+        </header>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">Hamısı</button>
+            <button class="filter-btn" data-filter="pending">Gözləmədə</button>
+            <button class="filter-btn" data-filter="completed">Tamamlanıb</button>
+        </div>
+
+        <ul id="todo-list">
+            <!-- Tapşırıqlar bura əlavə ediləcək -->
+        </ul>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="az">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0f0f13">
