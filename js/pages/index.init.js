@@ -29,12 +29,15 @@ const logoutBtn    = document.getElementById("auth-logout");
 const strengthBar  = document.getElementById("strength-bar");
 
 // ── Decide which view to show
+function showView(show, hide) {
+  show?.removeAttribute("hidden");
+  hide?.setAttribute("hidden", "");
+}
+
 if (hasStoredAuth()) {
-  setupView?.classList.add("hidden");
-  unlockView?.classList.remove("hidden");
+  showView(unlockView, setupView);
 } else {
-  setupView?.classList.remove("hidden");
-  unlockView?.classList.add("hidden");
+  showView(setupView, unlockView);
 }
 
 // ── Passphrase strength meter (setup view)
@@ -83,7 +86,7 @@ setupForm?.addEventListener("submit", async (e) => {
   try {
     await setupAuth(token, passphrase, repo);
     if (doCreate) {
-      await createDataRepo(token, repo);
+      await createDataRepo(repo);
     }
     const data = await loadData();
     initState(data);
@@ -120,6 +123,5 @@ unlockForm?.addEventListener("submit", async (e) => {
 // ── Logout (reset) button
 logoutBtn?.addEventListener("click", () => {
   logout();
-  setupView?.classList.remove("hidden");
-  unlockView?.classList.add("hidden");
+  showView(setupView, unlockView);
 });
