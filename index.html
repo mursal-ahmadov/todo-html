@@ -1,901 +1,121 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="az" data-theme="auto">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo — Giriş</title>
+  <meta name="description" content="Şəxsi todo tətbiqi — GitHub ilə sinxronizasiya">
+  <link rel="manifest" href="/todo-html/manifest.webmanifest">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Todo">
+  <link rel="apple-touch-icon" href="/todo-html/assets/icons/icon-192.png">
+  <link rel="icon" href="/todo-html/assets/favicon.svg" type="image/svg+xml">
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/glass.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pages/auth.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "dayjs":       "https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js",
+      "marked":      "https://cdn.jsdelivr.net/npm/marked@11/lib/marked.esm.js",
+      "chart.js/auto": "https://cdn.jsdelivr.net/npm/chart.js@4/auto/auto.js",
+      "sortablejs":  "https://cdn.jsdelivr.net/npm/sortablejs@1/modular/sortable.esm.js"
+    }
+  }
+  </script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Tapşırıqlar</h1>
-            <div class="input-section">
-                <input type="text" id="todo-input" placeholder="Yeni tapşırıq əlavə et...">
-                <button id="add-btn"><i class="fas fa-plus"></i></button>
-            </div>
-        </header>
+  <main class="auth-page" id="auth-root">
 
-        <div class="filters">
-            <button class="filter-btn active" data-filter="all">Hamısı</button>
-            <button class="filter-btn" data-filter="pending">Gözləmədə</button>
-            <button class="filter-btn" data-filter="completed">Tamamlanıb</button>
+    <!-- Setup view (first time) -->
+    <div id="setup-view" class="auth-card glass animate-fade-up" hidden>
+      <div class="auth-logo">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="48" height="48" rx="14" fill="url(#g)"/>
+          <path d="M14 25l8 8 14-16" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs><linearGradient id="g" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#6366f1"/><stop offset="1" stop-color="#ec4899"/>
+          </linearGradient></defs>
+        </svg>
+        <h1 class="gradient-text">Todo</h1>
+      </div>
+
+      <p class="auth-subtitle">GitHub token-inizi daxil edib şifrə qurun.</p>
+
+      <form id="setup-form" class="auth-form" novalidate>
+        <div class="flex-col gap-2">
+          <label class="input-label" for="token-input">GitHub Token
+            <a href="https://github.com/settings/tokens/new?description=todo-app&scopes=repo" target="_blank" rel="noopener noreferrer" style="font-size:var(--fs-xs);color:var(--accent);margin-left:var(--s-2)">Yeni yarat ↗</a>
+          </label>
+          <input id="token-input" class="input" type="password" autocomplete="off" placeholder="ghp_…" required>
         </div>
 
-        <ul id="todo-list">
-            <!-- Tapşırıqlar bura əlavə ediləcək -->
-        </ul>
-    </div>
-    <script src="app.js"></script>
-</body>
-</html><!DOCTYPE html>
-<html lang="az">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0f0f13">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Todo">
-<link rel="manifest" href="manifest.json">
-<title>Todo</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #0f0f13;
-    --surface: #18181f;
-    --surface2: #22222c;
-    --surface3: #2c2c37;
-    --border: rgba(255,255,255,0.07);
-    --accent: #c8ff57;
-    --accent-dim: rgba(200,255,87,0.12);
-    --text: #f0f0f0;
-    --text-muted: rgba(240,240,240,0.42);
-    --text-dim: rgba(240,240,240,0.68);
-    --danger: #ff5f57;
-    --danger-dim: rgba(255,95,87,0.15);
-    --done-color: rgba(240,240,240,0.25);
-    --radius: 18px;
-    --radius-sm: 10px;
-    --shadow: 0 20px 60px rgba(0,0,0,0.28);
-  }
-
-  html { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
-
-  body {
-    min-height: 100dvh;
-    background:
-      radial-gradient(circle at top right, rgba(200,255,87,0.08), transparent 32%),
-      radial-gradient(circle at top left, rgba(87,200,255,0.08), transparent 28%),
-      var(--bg);
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
-  #setup-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100dvh;
-    padding: 32px 24px;
-    gap: 28px;
-  }
-
-  .setup-logo { font-family: 'DM Serif Display', serif; font-size: 48px; color: var(--accent); line-height: 1; }
-  .setup-title { font-size: 24px; font-weight: 500; text-align: center; }
-  .setup-sub { font-size: 14px; color: var(--text-muted); text-align: center; line-height: 1.6; max-width: 360px; }
-
-  .setup-card,
-  .calendar-shell,
-  .insight-panel,
-  .insight-card,
-  .modal,
-  .stat-pill,
-  .list-chip,
-  .view-tab,
-  .filter-tab,
-  .add-box,
-  .calendar-day,
-  .calendar-list-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-  }
-
-  .setup-card {
-    border-radius: var(--radius);
-    padding: 28px 24px;
-    width: 100%;
-    max-width: 420px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .setup-label,
-  .section-title,
-  .field-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .setup-input,
-  .search-input,
-  .modal-input,
-  .opt-input,
-  .opt-select {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    width: 100%;
-    outline: none;
-  }
-
-  .setup-input,
-  .modal-input,
-  .opt-input,
-  .opt-select { transition: border-color 0.2s, background 0.2s; }
-  .setup-input:focus,
-  .search-input:focus,
-  .modal-input:focus,
-  .opt-input:focus,
-  .opt-select:focus { border-color: rgba(200,255,87,0.4); background: var(--surface3); }
-
-  .setup-hint,
-  .muted-note,
-  .settings-note { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
-  .setup-hint a { color: var(--accent); text-decoration: none; }
-
-  .btn-primary,
-  .btn-secondary,
-  .list-add-btn,
-  .install-btn,
-  .add-btn {
-    border: none;
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    transition: transform 0.18s, opacity 0.18s, background 0.18s;
-  }
-
-  .btn-primary,
-  .install-btn,
-  .add-btn {
-    background: var(--accent);
-    color: #0f0f13;
-    font-weight: 600;
-  }
-
-  .btn-primary { padding: 14px 24px; width: 100%; }
-  .btn-secondary,
-  .list-add-btn { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-  .btn-secondary { padding: 12px; flex: 1; }
-  .btn-primary:hover,
-  .btn-secondary:hover,
-  .list-add-btn:hover,
-  .install-btn:hover,
-  .add-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-
-  #app { display: none; max-width: 940px; margin: 0 auto; padding: 0 0 220px; }
-
-  .app-header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    padding: 56px 24px 26px;
-    background: linear-gradient(to bottom, rgba(15,15,19,0.97) 78%, rgba(15,15,19,0));
-    backdrop-filter: blur(16px);
-  }
-
-  .header-row,
-  .header-actions,
-  .stats-bar,
-  .filter-tabs,
-  .view-tabs,
-  .list-switcher,
-  .list-switch-scroll,
-  .todo-meta,
-  .todo-actions,
-  .modal-actions,
-  .summary-row,
-  .calendar-toolbar { display: flex; align-items: center; gap: 10px; }
-
-  .header-row { justify-content: space-between; align-items: flex-start; }
-  .header-title { font-family: 'DM Serif Display', serif; font-size: 42px; line-height: 0.95; letter-spacing: -0.03em; }
-  .header-title span { color: var(--accent); }
-  .header-date { font-size: 12px; color: var(--text-muted); margin-top: 10px; }
-
-  .icon-btn {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    color: var(--text-dim);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s, transform 0.2s;
-  }
-
-  .icon-btn:hover { background: var(--surface2); color: var(--text); transform: translateY(-1px); }
-
-  .list-switcher {
-    margin-top: 18px;
-    justify-content: space-between;
-    align-items: stretch;
-    gap: 12px;
-  }
-
-  .list-switch-scroll {
-    overflow: auto hidden;
-    scrollbar-width: none;
-    flex: 1;
-    padding-bottom: 2px;
-  }
-
-  .list-switch-scroll::-webkit-scrollbar { display: none; }
-
-  .list-chip,
-  .view-tab,
-  .filter-tab,
-  .stat-pill,
-  .meta-badge,
-  .list-add-btn {
-    border-radius: 999px;
-  }
-
-  .list-chip,
-  .view-tab,
-  .filter-tab,
-  .list-add-btn {
-    padding: 9px 14px;
-    color: var(--text-dim);
-    font-size: 13px;
-    white-space: nowrap;
-  }
-
-  .list-chip,
-  .view-tab,
-  .filter-tab,
-  .list-add-btn,
-  .action-btn,
-  .calendar-day { cursor: pointer; }
-
-  .list-chip.active,
-  .view-tab.active,
-  .filter-tab.active { background: var(--accent); border-color: var(--accent); color: #0f0f13; }
-
-  .list-chip-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 8px;
-  }
-
-  .view-tabs,
-  .stats-bar,
-  .filter-tabs,
-  .search-row { margin-top: 18px; flex-wrap: wrap; }
-
-  .search-input { border-radius: 999px; }
-
-  .stats-bar { gap: 8px; }
-  .stat-pill { padding: 8px 14px; font-size: 12px; color: var(--text-dim); }
-  .stat-pill strong { color: var(--text); font-weight: 600; }
-  .stat-pill.accent { background: var(--accent-dim); border-color: rgba(200,255,87,0.22); }
-  .stat-pill.accent strong { color: var(--accent); }
-  .stat-pill.danger { background: var(--danger-dim); border-color: rgba(255,95,87,0.28); }
-  .stat-pill.danger strong { color: var(--danger); }
-
-  .view-section { padding: 0 24px; }
-
-  .todo-list { display: flex; flex-direction: column; gap: 10px; }
-
-  .todo-item {
-    position: relative;
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    padding: 16px 16px 16px 18px;
-    border-radius: var(--radius);
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
-    border: 1px solid var(--border);
-    transition: border-color 0.2s, transform 0.2s, background 0.2s;
-    overflow: hidden;
-  }
-
-  .todo-item:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-1px); }
-  .todo-item.done { background: rgba(255,255,255,0.02); }
-  .todo-item.done .todo-text { color: var(--done-color); text-decoration: line-through; }
-  .todo-item.sortable { cursor: grab; }
-
-  .priority-bar {
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 4px;
-    border-radius: 16px 0 0 16px;
-  }
-
-  .priority-bar.high { background: #ff5f57; }
-  .priority-bar.mid { background: #ffb347; }
-  .priority-bar.low { background: #57c8ff; }
-
-  .drag-handle {
-    color: var(--text-muted);
-    font-size: 16px;
-    line-height: 1;
-    padding-top: 2px;
-    user-select: none;
-  }
-
-  .check-btn {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(255,255,255,0.2);
-    background: transparent;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 2px;
-    flex-shrink: 0;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .check-btn:hover { border-color: var(--accent); }
-  .check-btn:disabled { opacity: 0.38; cursor: not-allowed; }
-  .todo-item.done .check-btn { background: var(--accent); border-color: var(--accent); }
-  .check-btn svg { opacity: 0; transition: opacity 0.2s; }
-  .todo-item.done .check-btn svg { opacity: 1; }
-
-  .todo-content { flex: 1; min-width: 0; }
-  .todo-text { font-size: 15px; line-height: 1.5; word-break: break-word; }
-  .todo-meta { flex-wrap: wrap; margin-top: 8px; gap: 6px; }
-  .todo-time { font-size: 11px; color: var(--text-muted); }
-
-  .meta-badge {
-    padding: 4px 9px;
-    font-size: 11px;
-    background: var(--surface2);
-    color: var(--text-dim);
-    border: 1px solid rgba(255,255,255,0.04);
-  }
-
-  .meta-badge.is-accent { background: var(--accent-dim); color: var(--accent); }
-  .meta-badge.is-danger { background: var(--danger-dim); color: var(--danger); }
-
-  .todo-actions { flex-shrink: 0; }
-  .action-btn {
-    width: 30px;
-    height: 30px;
-    border: none;
-    border-radius: 9px;
-    background: transparent;
-    color: var(--text-muted);
-    transition: background 0.18s, color 0.18s;
-  }
-  .action-btn:hover { background: var(--surface2); color: var(--text); }
-  .action-btn.delete:hover { background: var(--danger-dim); color: var(--danger); }
-
-  .empty-state {
-    text-align: center;
-    padding: 58px 22px;
-    color: var(--text-muted);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .empty-icon { font-size: 40px; opacity: 0.4; }
-  .empty-text { font-size: 15px; }
-
-  .calendar-shell,
-  .insight-panel,
-  .insight-card { border-radius: var(--radius); }
-
-  .calendar-shell { padding: 18px; }
-  .calendar-toolbar { justify-content: space-between; margin-bottom: 14px; }
-  .calendar-label { font-size: 15px; font-weight: 500; }
-  .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: 8px;
-  }
-
-  .calendar-head {
-    font-size: 11px;
-    color: var(--text-muted);
-    text-align: center;
-    padding-bottom: 6px;
-  }
-
-  .calendar-day {
-    min-height: 78px;
-    border-radius: 14px;
-    padding: 10px 8px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    color: var(--text);
-    transition: border-color 0.2s, transform 0.18s;
-  }
-
-  .calendar-day:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.12); }
-  .calendar-day.active { border-color: var(--accent); background: var(--accent-dim); }
-  .calendar-day.today { box-shadow: inset 0 0 0 1px rgba(200,255,87,0.32); }
-  .calendar-day.outside { opacity: 0.4; }
-  .calendar-day-num { font-size: 14px; text-align: left; }
-  .calendar-day-count { font-size: 11px; color: var(--text-muted); text-align: left; }
-
-  .calendar-day-list {
-    margin-top: 18px;
-    display: grid;
-    gap: 10px;
-  }
-
-  .calendar-list-item {
-    padding: 14px 16px;
-    border-radius: 14px;
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
-  .calendar-list-item strong { font-size: 14px; }
-  .calendar-list-item span { font-size: 12px; color: var(--text-muted); }
-
-  .insights-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .insight-card,
-  .insight-panel { padding: 18px; }
-  .insight-label { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
-  .insight-value { font-size: 34px; font-family: 'DM Serif Display', serif; }
-
-  .bar-row,
-  .summary-row { display: grid; gap: 8px; margin-top: 12px; }
-  .bar-label,
-  .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
-
-  .bar-track {
-    height: 8px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.05);
-    overflow: hidden;
-  }
-
-  .bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), #57c8ff);
-    border-radius: 999px;
-  }
-
-  .add-area {
-    position: fixed;
-    inset: auto 0 0;
-    z-index: 20;
-    padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
-    background: linear-gradient(to top, rgba(15,15,19,0.98) 62%, rgba(15,15,19,0));
-    backdrop-filter: blur(16px);
-  }
-
-  .add-inner { max-width: 940px; margin: 0 auto; }
-  .add-row { display: flex; gap: 10px; align-items: flex-end; }
-
-  .add-box {
-    flex: 1;
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-
-  .add-input {
-    width: 100%;
-    background: transparent;
-    color: var(--text);
-    border: none;
-    outline: none;
-    padding: 16px 16px 10px;
-    resize: none;
-    line-height: 1.45;
-    max-height: 120px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-  }
-
-  .add-input::placeholder { color: var(--text-muted); }
-
-  .add-options {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-    padding: 0 12px 12px;
-  }
-
-  .field-stack { display: grid; gap: 6px; }
-  .opt-select option { background: var(--surface2); color: var(--text); }
-
-  .add-btn {
-    width: 54px;
-    height: 54px;
-    flex-shrink: 0;
-    border-radius: 16px;
-  }
-
-  .toast {
-    position: fixed;
-    left: 50%;
-    bottom: 118px;
-    transform: translateX(-50%) translateY(20px);
-    padding: 10px 18px;
-    border-radius: 999px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-size: 13px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.24s, transform 0.24s;
-    z-index: 999;
-  }
-
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  .toast.success { border-color: rgba(200,255,87,0.28); color: var(--accent); }
-  .toast.error { border-color: rgba(255,95,87,0.28); color: var(--danger); }
-
-  .install-banner {
-    position: fixed;
-    inset: 0 0 auto;
-    z-index: 100;
-    display: none;
-    align-items: center;
-    gap: 12px;
-    padding: calc(14px + env(safe-area-inset-top)) 20px 14px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .install-banner.visible { display: flex; }
-  .install-banner-text { flex: 1; }
-  .install-banner-title { font-size: 14px; font-weight: 500; }
-  .install-banner-sub { font-size: 12px; color: var(--text-muted); }
-  .install-close {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: 18px;
-    cursor: pointer;
-  }
-
-  .sync-dot,
-  .pending-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    display: inline-block;
-    vertical-align: middle;
-  }
-
-  .sync-dot { background: var(--accent); animation: pulse 1.5s infinite; }
-  .pending-dot { background: #57c8ff; }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.45; transform: scale(0.72); }
-  }
-
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 60;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    background: rgba(0,0,0,0.7);
-  }
-
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    width: min(100%, 520px);
-    border-radius: var(--radius);
-    padding: 24px;
-    display: grid;
-    gap: 16px;
-  }
-
-  .modal-title { font-size: 18px; font-weight: 600; }
-  .modal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-
-  .loader {
-    padding: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    color: var(--text-muted);
-  }
-
-  .spinner {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.12);
-    border-top-color: var(--accent);
-    animation: spin 0.7s linear infinite;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  @media (max-width: 780px) {
-    #app { padding-bottom: 280px; }
-    .header-title { font-size: 34px; }
-    .insights-grid,
-    .add-options,
-    .modal-grid { grid-template-columns: 1fr; }
-    .calendar-grid { gap: 6px; }
-  }
-
-  @media (max-width: 560px) {
-    .app-header { padding-top: 48px; }
-    .header-row { flex-direction: column; gap: 16px; }
-    .header-actions { width: 100%; justify-content: flex-end; }
-    .list-switcher { flex-direction: column; }
-    .calendar-day { min-height: 68px; }
-    .todo-item { padding-right: 12px; }
-    .todo-actions { flex-direction: column; }
-  }
-</style>
-</head>
-<body>
-<div id="setup-screen">
-  <div><div class="setup-logo">✓</div></div>
-  <div style="text-align:center">
-    <div class="setup-title">Todo tətbiqi</div>
-    <div class="setup-sub" style="margin-top:8px">Bir tokenlə həm telefondan, həm kompdən gir. Data GitHub-da saxlanır, yeni çoxlu siyahı və planlama funksiyaları aktivdir.</div>
-  </div>
-  <div class="setup-card">
-    <div class="setup-label">GitHub Personal Access Token</div>
-    <input type="password" class="setup-input" id="token-input" placeholder="ghp_xxxxxxxxxxxx">
-    <div class="setup-hint">Token yaratmaq üçün: <a href="https://github.com/settings/tokens/new?scopes=repo&description=Todo+App" target="_blank">github.com/settings/tokens</a> → <strong>repo</strong> icazəsi seç</div>
-    <button class="btn-primary" onclick="saveToken()">Daxil ol</button>
-  </div>
-  <div class="setup-hint" style="text-align:center; max-width:340px">Token yalnız bu cihazda saxlanır. Data repo ayarını sonradan dəyişə bilərsən.</div>
-</div>
-
-<div class="install-banner" id="install-banner">
-  <div class="install-banner-icon">📱</div>
-  <div class="install-banner-text">
-    <div class="install-banner-title">Tətbiqi yüklə</div>
-    <div class="install-banner-sub">Ana ekranda app kimi istifadə et</div>
-  </div>
-  <button class="install-btn" onclick="installApp()">Yüklə</button>
-  <button class="install-close" onclick="dismissInstall()">✕</button>
-</div>
-
-<div id="app">
-  <div class="app-header">
-    <div class="header-row">
-      <div>
-        <div class="header-title">Plan <span id="sync-indicator"></span></div>
-        <div class="header-date" id="header-date"></div>
-      </div>
-      <div class="header-actions">
-        <button class="icon-btn" onclick="refreshTodos()" title="Yenilə">↻</button>
-        <button class="icon-btn" onclick="copyShareLink()" title="Paylaş">⤴</button>
-        <button class="icon-btn" onclick="showSettings()" title="Ayarlar">⚙</button>
-      </div>
-    </div>
-
-    <div class="list-switcher" id="list-switcher"></div>
-
-    <div class="view-tabs">
-      <button class="view-tab active" data-view="list" onclick="setView('list', this)">Siyahı</button>
-      <button class="view-tab" data-view="calendar" onclick="setView('calendar', this)">Təqvim</button>
-      <button class="view-tab" data-view="insights" onclick="setView('insights', this)">Statistika</button>
-    </div>
-
-    <div class="stats-bar" id="stats-bar"></div>
-
-    <div class="filter-tabs">
-      <button class="filter-tab active" onclick="setFilter('all', this)">Hamısı</button>
-      <button class="filter-tab" onclick="setFilter('active', this)">Açıq</button>
-      <button class="filter-tab" onclick="setFilter('done', this)">Bitən</button>
-      <button class="filter-tab" onclick="setFilter('archive', this)">Arxiv</button>
-      <button class="filter-tab" onclick="setFilter('trash', this)">Zibil</button>
-    </div>
-
-    <div class="search-row">
-      <input class="search-input" id="search-input" type="search" placeholder="Mətn, etiket və ya kateqoriya axtar...">
-    </div>
-  </div>
-
-  <div class="view-section" id="list-section">
-    <div class="todo-list" id="todo-list">
-      <div class="loader"><div class="spinner"></div> Yüklənir...</div>
-    </div>
-  </div>
-
-  <div class="view-section" id="calendar-section" style="display:none">
-    <div class="calendar-shell">
-      <div class="calendar-toolbar">
-        <button class="icon-btn" onclick="changeCalendarMonth(-1)">←</button>
-        <div class="calendar-label" id="calendar-label"></div>
-        <button class="icon-btn" onclick="changeCalendarMonth(1)">→</button>
-      </div>
-      <div class="calendar-grid" id="calendar-grid"></div>
-      <div class="calendar-day-list" id="calendar-day-list"></div>
-    </div>
-  </div>
-
-  <div class="view-section" id="insights-section" style="display:none">
-    <div class="insights-grid" id="insights-grid"></div>
-  </div>
-</div>
-
-<div class="add-area" id="add-area" style="display:none">
-  <div class="add-inner">
-    <div class="add-row">
-      <div class="add-box">
-        <textarea class="add-input" id="add-input" placeholder="Yeni tapşırıq əlavə et..." rows="1"></textarea>
-        <div class="add-options">
-          <div class="field-stack">
-            <div class="field-label">Prioritet</div>
-            <select class="opt-select" id="priority-select">
-              <option value="low">Aşağı</option>
-              <option value="mid" selected>Orta</option>
-              <option value="high">Yüksək</option>
-            </select>
-          </div>
-          <div class="field-stack">
-            <div class="field-label">Etiket</div>
-            <input class="opt-input" type="text" id="tag-input" placeholder="#etiket">
-          </div>
-          <div class="field-stack">
-            <div class="field-label">Kateqoriya</div>
-            <input class="opt-input" type="text" id="category-input" placeholder="iş, şəxsi, alış-veriş...">
-          </div>
-          <div class="field-stack">
-            <div class="field-label">Tarix</div>
-            <input class="opt-input" type="date" id="due-input">
-          </div>
-          <div class="field-stack">
-            <div class="field-label">Xatırlatma</div>
-            <input class="opt-input" type="datetime-local" id="reminder-input">
-          </div>
-          <div class="field-stack">
-            <div class="field-label">Təkrar</div>
-            <select class="opt-select" id="repeat-select">
-              <option value="none">Təkrar yoxdur</option>
-              <option value="daily">Hər gün</option>
-              <option value="weekly">Həftəlik</option>
-              <option value="monthly">Aylıq</option>
-            </select>
-          </div>
+        <div class="flex-col gap-2">
+          <label class="input-label" for="repo-name">Data repo adı</label>
+          <input id="repo-name" class="input" type="text" value="todo-data" autocomplete="off">
+          <label class="flex gap-2 align-center" style="font-size:var(--fs-sm);color:var(--text-secondary);cursor:pointer">
+            <input id="create-repo" type="checkbox" class="checkbox" checked>
+            Repo mövcud deyilsə özü yarsın
+          </label>
         </div>
+
+        <div class="flex-col gap-2">
+          <label class="input-label" for="passphrase-input">Şifrə (passphrase)</label>
+          <input id="passphrase-input" class="input" type="password" autocomplete="new-password" placeholder="Güclü şifrə daxil edin…" required>
+          <div id="strength-bar" class="passphrase-strength" data-strength=""></div>
+        </div>
+
+        <div class="flex-col gap-2">
+          <label class="input-label" for="passphrase-confirm">Şifrəni təsdiqlə</label>
+          <input id="passphrase-confirm" class="input" type="password" autocomplete="new-password" placeholder="Yenidən daxil edin…" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:var(--s-2)">Başla →</button>
+      </form>
+    </div>
+
+    <!-- Unlock view (returning user) -->
+    <div id="unlock-view" class="auth-card glass animate-fade-up" hidden>
+      <div class="auth-logo">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="48" height="48" rx="14" fill="url(#g2)"/>
+          <path d="M14 25l8 8 14-16" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs><linearGradient id="g2" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#6366f1"/><stop offset="1" stop-color="#ec4899"/>
+          </linearGradient></defs>
+        </svg>
+        <h1 class="gradient-text">Todo</h1>
       </div>
-      <button class="add-btn" onclick="addTodo()">+</button>
-    </div>
-  </div>
-</div>
 
-<div class="modal-overlay" id="edit-modal">
-  <div class="modal">
-    <div class="modal-title">Tapşırığı düzəlt</div>
-    <textarea class="modal-input" id="edit-input" rows="4" style="resize:none; line-height:1.5"></textarea>
-    <div class="modal-grid">
-      <select class="modal-input" id="edit-priority">
-        <option value="low">Aşağı</option>
-        <option value="mid">Orta</option>
-        <option value="high">Yüksək</option>
-      </select>
-      <input class="modal-input" type="text" id="edit-tag" placeholder="etiket">
-      <input class="modal-input" type="text" id="edit-category" placeholder="kateqoriya">
-      <select class="modal-input" id="edit-repeat">
-        <option value="none">Təkrar yoxdur</option>
-        <option value="daily">Hər gün</option>
-        <option value="weekly">Həftəlik</option>
-        <option value="monthly">Aylıq</option>
-      </select>
-      <input class="modal-input" type="date" id="edit-due">
-      <input class="modal-input" type="datetime-local" id="edit-reminder">
-    </div>
-    <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeEditModal()">Ləğv et</button>
-      <button class="btn-primary" style="flex:1" onclick="saveEdit()">Saxla</button>
-    </div>
-  </div>
-</div>
+      <p class="auth-subtitle">Şifrənizi daxil edib davam edin.</p>
 
-<div class="modal-overlay" id="list-modal">
-  <div class="modal">
-    <div class="modal-title">Yeni siyahı</div>
-    <input class="modal-input" id="list-name-input" type="text" placeholder="Məsələn: Alış-veriş">
-    <input class="modal-input" id="list-color-input" type="color" value="#c8ff57" style="height:48px; padding:6px;">
-    <div class="muted-note">Paylaş düyməsi həmin siyahı üçün ayrıca link kopyalayır.</div>
-    <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeListModal()">Bağla</button>
-      <button class="btn-primary" style="flex:1" onclick="createList()">Yarat</button>
-    </div>
-  </div>
-</div>
+      <form id="unlock-form" class="auth-form" novalidate>
+        <div class="flex-col gap-2">
+          <label class="input-label" for="unlock-passphrase">Şifrə</label>
+          <input id="unlock-passphrase" class="input" type="password" autocomplete="current-password" placeholder="Şifrənizi daxil edin…" autofocus required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:var(--s-2)">Aç →</button>
+      </form>
 
-<div class="modal-overlay" id="settings-modal">
-  <div class="modal">
-    <div class="modal-title">Ayarlar</div>
-    <div class="field-stack">
-      <div class="field-label">GitHub Token</div>
-      <input type="password" class="modal-input" id="settings-token" placeholder="ghp_xxxxxxxxxxxx">
+      <button id="auth-logout" class="btn btn-ghost btn-sm" style="margin-top:var(--s-4)">Sıfırla (yeni hesab)</button>
     </div>
-    <div class="modal-grid">
-      <div class="field-stack">
-        <div class="field-label">Data repo</div>
-        <input class="modal-input" id="settings-data-repo" type="text" placeholder="owner/repo">
-      </div>
-      <div class="field-stack">
-        <div class="field-label">Data faylı</div>
-        <input class="modal-input" id="settings-data-file" type="text" placeholder="data/todos.json">
-      </div>
-    </div>
-    <div class="settings-note" id="settings-repo-note"></div>
-    <div class="summary-row">
-      <span id="notification-status">Bildiriş statusu</span>
-      <button class="btn-secondary" id="notification-btn" onclick="enableNotifications()">Aktiv et</button>
-    </div>
-    <div class="muted-note">Sayt repo-su public ola bilər. Qeydlərin gizli qalması üçün data repo-nu ayrıca private repo ilə dəyişə bilərsən.</div>
-    <div class="modal-actions">
-      <button class="btn-secondary" onclick="closeSettings()">Bağla</button>
-      <button class="btn-primary" style="flex:1" onclick="updateSettings()">Yadda saxla</button>
-    </div>
-  </div>
-</div>
+  </main>
 
-<div class="toast" id="toast"></div>
-
-<script>
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  window.deferredTodoPrompt = e;
-  if (!localStorage.getItem('install_dismissed')) {
-    document.getElementById('install-banner').classList.add('visible');
-  }
-});
-
-function installApp() {
-  if (window.deferredTodoPrompt) {
-    window.deferredTodoPrompt.prompt();
-    window.deferredTodoPrompt.userChoice.then(choice => {
-      if (choice.outcome === 'accepted' && window.toast) {
-        toast('Tətbiq yükləndi ✓', 'success');
-      }
-      dismissInstall();
-    });
-  }
-}
-
-function dismissInstall() {
-  localStorage.setItem('install_dismissed', '1');
-  document.getElementById('install-banner').classList.remove('visible');
-}
-</script>
-<script src="./app.js"></script>
+  <script type="module" src="js/pages/index.init.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/todo-html/service-worker.js').catch(console.error);
+    }
+  </script>
 </body>
 </html>

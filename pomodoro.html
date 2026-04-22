@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="az" data-theme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo — Pomodoro</title>
+  <link rel="manifest" href="/todo-html/manifest.webmanifest">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Todo">
+  <link rel="apple-touch-icon" href="/todo-html/assets/icons/icon-192.png">
+  <link rel="icon" href="/todo-html/assets/favicon.svg" type="image/svg+xml">
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/glass.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pages/pomodoro.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "dayjs":         "https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js",
+      "marked":        "https://cdn.jsdelivr.net/npm/marked@11/lib/marked.esm.js",
+      "chart.js/auto": "https://cdn.jsdelivr.net/npm/chart.js@4/auto/auto.js",
+      "sortablejs":    "https://cdn.jsdelivr.net/npm/sortablejs@1/modular/sortable.esm.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="app-shell">
+    <div id="nav-root"></div>
+
+    <main class="main-content" role="main" style="max-width:600px;margin:0 auto;padding-top:var(--s-8)">
+      <!-- Phase pills -->
+      <div class="flex gap-2 justify-center" style="margin-bottom:var(--s-6)">
+        <button class="phase-pill active" data-phase="work">🍅 Çalışma</button>
+        <button class="phase-pill" data-phase="short">☕ Qısa fasilə</button>
+        <button class="phase-pill" data-phase="long">🛌 Uzun fasilə</button>
+      </div>
+
+      <!-- SVG Ring timer -->
+      <div class="timer-ring-wrap">
+        <svg class="timer-ring" viewBox="0 0 260 260" aria-hidden="true">
+          <circle class="timer-ring-bg" cx="130" cy="130" r="110"/>
+          <circle id="ring-progress" class="timer-ring-progress" cx="130" cy="130" r="110"
+            stroke-dasharray="691.15"
+            stroke-dashoffset="0"
+            transform="rotate(-90 130 130)"/>
+        </svg>
+        <div class="timer-display-wrap">
+          <div id="timer-display" class="timer-display">25:00</div>
+          <div id="phase-label" class="phase-label">🍅 Çalışma</div>
+        </div>
+      </div>
+
+      <!-- Session dots -->
+      <div id="session-dots" class="session-dots" aria-label="Sessiya gedişatı"></div>
+
+      <!-- Controls -->
+      <div class="timer-controls">
+        <button id="reset-btn" class="btn btn-ghost btn-icon" aria-label="Sıfırla">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+        </button>
+        <button id="start-pause-btn" class="btn btn-primary timer-main-btn" aria-label="Başla / Dur">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        </button>
+        <button id="skip-btn" class="btn btn-ghost btn-icon" aria-label="Keç">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+        </button>
+      </div>
+
+      <!-- Task selector -->
+      <div class="glass-sm" style="padding:var(--s-4);border-radius:var(--r-xl);margin-top:var(--s-6)">
+        <label class="input-label" for="pomodoro-task-select">Fokus taskı</label>
+        <select id="pomodoro-task-select" class="input" style="margin-top:var(--s-2)">
+          <option value="">— Task seç (isteğe bağlı) —</option>
+        </select>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="js/pages/pomodoro.init.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/todo-html/service-worker.js').catch(console.error);
+    }
+  </script>
+</body>
+</html>

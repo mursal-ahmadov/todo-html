@@ -1,0 +1,401 @@
+/* ============================================================
+   APP PAGE — app.html
+   ============================================================ */
+
+/* ── Quick-add ─────────────────────────────────────────────── */
+
+.quick-add-wrap {
+  position: relative;
+}
+
+.quick-add {
+  width: 100%;
+  padding: var(--s-3) var(--s-5);
+  padding-right: var(--s-9);
+  font-size: var(--fs-base);
+  background: var(--surface);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-full);
+  color: var(--text-primary);
+  transition: all var(--t-fast);
+}
+
+.quick-add::placeholder { color: var(--text-muted); }
+
+.quick-add:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
+  background: var(--surface-hover);
+}
+
+.quick-add-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all var(--t-fast);
+}
+.quick-add-btn:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--shadow-accent);
+}
+
+/* ── Task list ─────────────────────────────────────────────── */
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+/* ── Task card ─────────────────────────────────────────────── */
+
+.task-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  cursor: pointer;
+  position: relative;
+  transition: all var(--t-fast);
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  background: var(--surface-hover);
+}
+
+.task-card.is-dragging {
+  transform: scale(1.03) rotate(1deg);
+  box-shadow: var(--shadow-xl);
+  opacity: 0.9;
+  z-index: var(--z-raised);
+}
+
+.task-card.completed {
+  opacity: 0.6;
+}
+
+.task-card.completed .task-title {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* Drag handle */
+.task-drag-handle {
+  position: absolute;
+  left: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  opacity: 0;
+  cursor: grab;
+  padding: var(--s-2);
+  font-size: 14px;
+  transition: opacity var(--t-fast);
+}
+
+.task-card:hover .task-drag-handle {
+  opacity: 1;
+}
+
+/* Checkbox */
+.task-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-full);
+  border: 2px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  background: transparent;
+  margin-top: 1px;
+}
+
+.task-checkbox:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.task-checkbox.checked {
+  background: var(--success);
+  border-color: var(--success);
+  animation: bounceIn 400ms var(--t-bounce);
+}
+
+.task-checkbox__tick {
+  width: 12px;
+  height: 12px;
+  opacity: 0;
+  transform: scale(0);
+  transition: all var(--t-fast);
+}
+
+.task-checkbox.checked .task-checkbox__tick {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Task body */
+.task-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-title {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  word-break: break-word;
+  line-height: var(--lh-snug);
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.task-due {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.task-due.overdue  { color: var(--danger); }
+.task-due.today    { color: var(--warning); }
+.task-due.soon     { color: var(--info); }
+
+.task-category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  padding: 1px 8px;
+  border-radius: var(--r-full);
+}
+
+.task-tag {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  padding: 1px 6px;
+  background: var(--surface);
+  border-radius: var(--r-full);
+}
+
+/* Task actions */
+.task-actions {
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  transition: opacity var(--t-fast);
+  flex-shrink: 0;
+}
+
+.task-card:hover .task-actions {
+  opacity: 1;
+}
+
+/* ── Kanban ─────────────────────────────────────────────────── */
+
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-4);
+  align-items: start;
+}
+
+.kanban-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  min-height: 200px;
+}
+
+.kanban-col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-lg);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+}
+
+.kanban-col-header.todo   { background: var(--info-light);    color: var(--info); }
+.kanban-col-header.doing  { background: var(--warning-light); color: var(--warning); }
+.kanban-col-header.done   { background: var(--success-light); color: var(--success); }
+
+.kanban-drop-zone {
+  min-height: 80px;
+  border: 2px dashed var(--divider);
+  border-radius: var(--r-lg);
+  transition: all var(--t-fast);
+}
+.kanban-drop-zone.drag-over {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+/* ── Calendar view ──────────────────────────────────────────── */
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--s-4);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-day-name {
+  text-align: center;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: var(--s-2) 0;
+}
+
+.calendar-cell {
+  min-height: 80px;
+  padding: var(--s-2);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid transparent;
+  transition: all var(--t-fast);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.calendar-cell:hover {
+  background: var(--surface-hover);
+  border-color: var(--glass-border);
+}
+
+.calendar-cell.today {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.calendar-cell.other-month {
+  opacity: 0.35;
+}
+
+.calendar-cell__day {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.calendar-cell.today .calendar-cell__day {
+  color: var(--accent);
+}
+
+.calendar-task-dot {
+  width: 100%;
+  padding: 2px 4px;
+  font-size: 10px;
+  border-radius: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* ── View toggle ────────────────────────────────────────────── */
+
+.view-toggle {
+  display: flex;
+  gap: 2px;
+  background: var(--surface);
+  border-radius: var(--r-md);
+  padding: 3px;
+}
+
+.view-btn {
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--t-fast);
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+}
+
+.view-btn:hover { color: var(--text-secondary); }
+.view-btn.active {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Install banner ─────────────────────────────────────────── */
+
+#install-banner {
+  position: fixed;
+  bottom: var(--s-5);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-xl);
+  padding: var(--s-3) var(--s-5);
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-toast);
+  white-space: nowrap;
+  animation: slideUp 400ms var(--t-bounce) both;
+  font-size: var(--fs-sm);
+}
+
+@media (max-width: 480px) {
+  .kanban-board {
+    grid-template-columns: 1fr;
+  }
+  .calendar-grid {
+    font-size: var(--fs-xs);
+  }
+  .calendar-cell {
+    min-height: 60px;
+    padding: var(--s-1);
+  }
+}

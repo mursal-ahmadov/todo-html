@@ -1,0 +1,145 @@
+/* ============================================================
+   DESIGN TOKENS — CSS VARIABLES
+   ============================================================ */
+
+:root {
+  /* ── Gradients ─────────────────────────────────────────── */
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  --bg-mesh:
+    radial-gradient(at 20% 30%, #7c3aed 0, transparent 50%),
+    radial-gradient(at 80% 70%, #ec4899 0, transparent 50%),
+    radial-gradient(at 50% 50%, #3b82f6 0, transparent 50%);
+
+  /* ── Glass ─────────────────────────────────────────────── */
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --glass-blur: blur(20px) saturate(180%);
+
+  /* ── Colors ────────────────────────────────────────────── */
+  --text-primary: #1a1a2e;
+  --text-secondary: rgba(26, 26, 46, 0.7);
+  --text-muted: rgba(26, 26, 46, 0.45);
+  --accent: #6366f1;
+  --accent-hover: #4f51d8;
+  --accent-light: rgba(99, 102, 241, 0.15);
+  --success: #10b981;
+  --success-light: rgba(16, 185, 129, 0.15);
+  --warning: #f59e0b;
+  --warning-light: rgba(245, 158, 11, 0.15);
+  --danger: #ef4444;
+  --danger-light: rgba(239, 68, 68, 0.15);
+  --info: #3b82f6;
+  --info-light: rgba(59, 130, 246, 0.15);
+
+  --surface: rgba(255, 255, 255, 0.08);
+  --surface-hover: rgba(255, 255, 255, 0.16);
+  --surface-active: rgba(255, 255, 255, 0.22);
+  --divider: rgba(255, 255, 255, 0.12);
+
+  /* Category palette */
+  --cat-1: #6366f1;
+  --cat-2: #ec4899;
+  --cat-3: #10b981;
+  --cat-4: #f59e0b;
+  --cat-5: #3b82f6;
+  --cat-6: #ef4444;
+  --cat-7: #8b5cf6;
+  --cat-8: #14b8a6;
+  --cat-9: #f97316;
+  --cat-10: #06b6d4;
+  --cat-11: #84cc16;
+  --cat-12: #a855f7;
+
+  /* ── Spacing (4px base) ────────────────────────────────── */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 80px;
+  --s-10: 96px;
+
+  /* ── Border Radius ─────────────────────────────────────── */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-2xl: 32px;
+  --r-full: 9999px;
+
+  /* ── Typography ────────────────────────────────────────── */
+  --font: "Inter", "Noto Sans Azerbaijani", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: "Cal Sans", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  --fs-xs: 11px;
+  --fs-sm: 13px;
+  --fs-base: 15px;
+  --fs-md: 16px;
+  --fs-lg: 18px;
+  --fs-xl: 20px;
+  --fs-2xl: 24px;
+  --fs-3xl: 30px;
+  --fs-4xl: 36px;
+  --fs-5xl: 48px;
+
+  --lh-tight: 1.2;
+  --lh-snug: 1.35;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.65;
+
+  /* ── Transitions ───────────────────────────────────────── */
+  --t-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --t-med: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --t-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  --t-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --t-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Shadows ───────────────────────────────────────────── */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.2);
+  --shadow-accent: 0 4px 20px rgba(99, 102, 241, 0.4);
+
+  /* ── Z-index scale ─────────────────────────────────────── */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+
+  /* ── Layout ────────────────────────────────────────────── */
+  --sidebar-w: 240px;
+  --nav-h: 56px;
+  --content-max: 900px;
+}
+
+/* ── Dark Mode ─────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --bg-gradient: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  --bg-mesh:
+    radial-gradient(at 20% 30%, #3730a3 0, transparent 50%),
+    radial-gradient(at 80% 70%, #831843 0, transparent 50%),
+    radial-gradient(at 50% 50%, #1e3a5f 0, transparent 50%);
+
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+  --text-primary: #f1f5f9;
+  --text-secondary: rgba(241, 245, 249, 0.7);
+  --text-muted: rgba(241, 245, 249, 0.4);
+
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-hover: rgba(255, 255, 255, 0.09);
+  --surface-active: rgba(255, 255, 255, 0.14);
+  --divider: rgba(255, 255, 255, 0.08);
+}

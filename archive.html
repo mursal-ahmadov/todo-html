@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="az" data-theme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo — Arxiv</title>
+  <link rel="manifest" href="/todo-html/manifest.webmanifest">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Todo">
+  <link rel="apple-touch-icon" href="/todo-html/assets/icons/icon-192.png">
+  <link rel="icon" href="/todo-html/assets/favicon.svg" type="image/svg+xml">
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/glass.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pages/archive.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "dayjs":         "https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js",
+      "marked":        "https://cdn.jsdelivr.net/npm/marked@11/lib/marked.esm.js",
+      "chart.js/auto": "https://cdn.jsdelivr.net/npm/chart.js@4/auto/auto.js",
+      "sortablejs":    "https://cdn.jsdelivr.net/npm/sortablejs@1/modular/sortable.esm.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="app-shell">
+    <div id="nav-root"></div>
+
+    <main class="main-content" role="main">
+      <h1 class="section-title" style="margin-bottom:var(--s-5)">📦 Arxiv və Zibil Qutusu</h1>
+
+      <!-- Tabs -->
+      <div class="tabs" role="tablist" style="margin-bottom:var(--s-5)">
+        <button id="tab-archive" class="tab active" role="tab" aria-selected="true" aria-controls="archive-panel">📦 Arxiv</button>
+        <button id="tab-trash"   class="tab"        role="tab" aria-selected="false" aria-controls="trash-panel">🗑️ Zibil</button>
+      </div>
+
+      <!-- Archive panel -->
+      <div id="archive-panel" role="tabpanel">
+        <div id="archive-list"></div>
+        <p id="empty-archive" class="empty-state" hidden>
+          <span class="empty-state-icon">📦</span>
+          <span>Arxiv boşdur</span>
+        </p>
+      </div>
+
+      <!-- Trash panel -->
+      <div id="trash-panel" role="tabpanel" hidden>
+        <div id="trash-list"></div>
+        <p id="empty-trash" class="empty-state" hidden>
+          <span class="empty-state-icon">🗑️</span>
+          <span>Zibil qutusu boşdur</span>
+        </p>
+        <button id="empty-trash-btn" class="btn btn-danger btn-sm" style="margin-top:var(--s-4)">
+          Zibil qutusunu təmizlə
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="js/pages/archive.init.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/todo-html/service-worker.js').catch(console.error);
+    }
+  </script>
+</body>
+</html>

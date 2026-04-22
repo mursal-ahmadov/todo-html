@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="az" data-theme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo — Parametrlər</title>
+  <link rel="manifest" href="/todo-html/manifest.webmanifest">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Todo">
+  <link rel="apple-touch-icon" href="/todo-html/assets/icons/icon-192.png">
+  <link rel="icon" href="/todo-html/assets/favicon.svg" type="image/svg+xml">
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/glass.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pages/settings.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "dayjs":         "https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js",
+      "marked":        "https://cdn.jsdelivr.net/npm/marked@11/lib/marked.esm.js",
+      "chart.js/auto": "https://cdn.jsdelivr.net/npm/chart.js@4/auto/auto.js",
+      "sortablejs":    "https://cdn.jsdelivr.net/npm/sortablejs@1/modular/sortable.esm.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="app-shell">
+    <div id="nav-root"></div>
+
+    <main class="main-content" role="main" style="max-width:640px">
+      <h1 class="section-title" style="margin-bottom:var(--s-6)">⚙️ Parametrlər</h1>
+
+      <!-- Görünüş -->
+      <section class="settings-section glass-sm">
+        <h2 class="settings-section-title">🎨 Görünüş</h2>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Tema</div>
+          </div>
+          <select id="setting-theme" class="input input-sm" style="width:auto">
+            <option value="auto">Avtomatik (sistem)</option>
+            <option value="light">İşıqlı</option>
+            <option value="dark">Qaranlıq</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Animasiyalar</div>
+          </div>
+          <label class="toggle-switch"><input id="setting-animations" type="checkbox" class="toggle-input"><span class="toggle-track"></span></label>
+        </div>
+      </section>
+
+      <!-- Bildirişlər -->
+      <section class="settings-section glass-sm">
+        <h2 class="settings-section-title">🔔 Bildirişlər</h2>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Push bildirişlər</div>
+          </div>
+          <label class="toggle-switch"><input id="setting-notifications" type="checkbox" class="toggle-input"><span class="toggle-track"></span></label>
+        </div>
+        <div class="flex gap-2" style="margin-top:var(--s-3)">
+          <button id="enable-notifications-btn" class="btn btn-secondary btn-sm">İcazə ver</button>
+          <button id="test-notification-btn" class="btn btn-ghost btn-sm">Test bildiriş</button>
+        </div>
+      </section>
+
+      <!-- Səslər -->
+      <section class="settings-section glass-sm">
+        <h2 class="settings-section-title">🔊 Səslər</h2>
+        <div class="setting-row">
+          <div><div class="setting-label">Task tamamlama səsi</div></div>
+          <label class="toggle-switch"><input id="setting-sound" type="checkbox" class="toggle-input"><span class="toggle-track"></span></label>
+        </div>
+      </section>
+
+      <!-- Pomodoro -->
+      <section class="settings-section glass-sm">
+        <h2 class="settings-section-title">🍅 Pomodoro</h2>
+        <div class="setting-row">
+          <label class="setting-label" for="setting-pomo-work">Çalışma müddəti (dəq)</label>
+          <input id="setting-pomo-work" class="input input-sm" type="number" min="1" max="90" style="width:72px">
+        </div>
+        <div class="setting-row">
+          <label class="setting-label" for="setting-pomo-short">Qısa fasilə (dəq)</label>
+          <input id="setting-pomo-short" class="input input-sm" type="number" min="1" max="30" style="width:72px">
+        </div>
+        <div class="setting-row">
+          <label class="setting-label" for="setting-pomo-long">Uzun fasilə (dəq)</label>
+          <input id="setting-pomo-long" class="input input-sm" type="number" min="5" max="60" style="width:72px">
+        </div>
+        <div class="setting-row">
+          <label class="setting-label" for="setting-pomo-every">Hər neçə sessiyadən bir uzun fasilə</label>
+          <input id="setting-pomo-every" class="input input-sm" type="number" min="2" max="8" style="width:72px">
+        </div>
+      </section>
+
+      <!-- Hesab -->
+      <section class="settings-section glass-sm">
+        <h2 class="settings-section-title">🔑 Hesab</h2>
+
+        <form id="change-passphrase-form" class="flex-col gap-3" novalidate>
+          <div class="setting-label">Şifrəni dəyiş</div>
+          <input id="current-passphrase" class="input input-sm" type="password" autocomplete="current-password" placeholder="Cari şifrə">
+          <input id="new-passphrase"     class="input input-sm" type="password" autocomplete="new-password"     placeholder="Yeni şifrə">
+          <button type="submit" class="btn btn-secondary btn-sm" style="align-self:flex-start">Şifrəni yenilə</button>
+        </form>
+
+        <div class="divider" style="margin:var(--s-4) 0;"></div>
+
+        <form id="change-token-form" class="flex-col gap-3" novalidate>
+          <div class="setting-label">GitHub Token-i yenilə</div>
+          <input id="new-token" class="input input-sm" type="password" autocomplete="off" placeholder="ghp_yeni_token…">
+          <button type="submit" class="btn btn-secondary btn-sm" style="align-self:flex-start">Token-i yenilə</button>
+        </form>
+      </section>
+
+      <!-- Data -->
+      <section class="settings-section glass-sm">
+        <h2 class="settings-section-title">💾 Data</h2>
+        <div class="flex gap-2 flex-wrap">
+          <button id="export-btn"     class="btn btn-secondary btn-sm">JSON ixrac</button>
+          <button id="clear-cache-btn" class="btn btn-ghost btn-sm">Cache sil</button>
+        </div>
+      </section>
+
+      <!-- Danger zone -->
+      <section class="settings-section settings-danger glass-sm">
+        <h2 class="settings-section-title" style="color:var(--error)">⚠️ Təhlükəli zona</h2>
+        <div class="flex gap-2 flex-wrap">
+          <button id="logout-btn"    class="btn btn-ghost btn-sm">Çıxış</button>
+          <button id="delete-all-btn" class="btn btn-danger btn-sm">Bütün datanı sil</button>
+        </div>
+      </section>
+
+      <div style="text-align:center;margin-top:var(--s-6);color:var(--text-muted);font-size:var(--fs-xs)">
+        Versiya <span id="app-version" class="version-badge">1.0.0</span>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="js/pages/settings.init.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/todo-html/service-worker.js').catch(console.error);
+    }
+  </script>
+</body>
+</html>

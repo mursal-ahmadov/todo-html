@@ -1,0 +1,85 @@
+/* ============================================================
+   GLASSMORPHISM UTILITY CLASSES
+   ============================================================ */
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-sm {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.glass-lg {
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-xl);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--glass-shadow);
+  transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  background: var(--surface-hover);
+}
+
+.glass-card:active {
+  transform: translateY(0);
+}
+
+/* Surface layers */
+.surface {
+  background: var(--surface);
+  border-radius: var(--r-md);
+}
+
+.surface-hover {
+  transition: background var(--t-fast);
+}
+.surface-hover:hover {
+  background: var(--surface-hover);
+}
+
+/* Highlight border */
+.border-glass {
+  border: 1px solid var(--glass-border);
+}
+.border-accent {
+  border: 1px solid var(--accent);
+}
+.border-success {
+  border: 1px solid var(--success);
+}
+.border-danger {
+  border: 1px solid var(--danger);
+}
+
+/* Glow effects */
+.glow-accent {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+.glow-success {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+}

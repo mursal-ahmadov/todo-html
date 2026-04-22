@@ -1,0 +1,171 @@
+/* ============================================================
+   ANIMATIONS & KEYFRAMES
+   ============================================================ */
+
+/* Mesh background animation */
+@keyframes meshMove {
+  0%   { opacity: 0.6; transform: scale(1)    rotate(0deg); }
+  50%  { opacity: 0.8; transform: scale(1.05) rotate(1deg); }
+  100% { opacity: 0.6; transform: scale(1.02) rotate(-0.5deg); }
+}
+
+/* Fade up — page load stagger */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Scale in — modal */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Scale out — modal close */
+@keyframes scaleOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.92); }
+}
+
+/* Slide down — dropdown */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide up — toast from bottom */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Toast exit */
+@keyframes slideOutDown {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(24px) scale(0.95); }
+}
+
+/* Checkbox tick (stroke-dashoffset) */
+@keyframes checkDraw {
+  from { stroke-dashoffset: 24; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* Checkbox fill */
+@keyframes checkFill {
+  from { r: 0; opacity: 0; }
+  to   { r: 10; opacity: 1; }
+}
+
+/* Shake — error */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
+/* Pulse — loading */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
+}
+
+/* Shimmer — skeleton */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+/* Spin — loader */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Bounce in — streak milestone */
+@keyframes bounceIn {
+  0%   { transform: scale(0.3);  opacity: 0; }
+  50%  { transform: scale(1.05); opacity: 1; }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* Confetti particle */
+@keyframes confettiDrop {
+  0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* Ring progress */
+@keyframes ringFill {
+  from { stroke-dashoffset: 440; }
+}
+
+/* Gradient shift — logo/accent */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ── Utility animation classes ─────────────────────────────── */
+
+.animate-fade-up {
+  animation: fadeUp var(--t-med) ease both;
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--t-fast) ease both;
+}
+
+.animate-scale-in {
+  animation: scaleIn 300ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.animate-shake {
+  animation: shake 400ms ease;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease infinite;
+}
+
+.animate-spin {
+  animation: spin 0.8s linear infinite;
+}
+
+.animate-bounce-in {
+  animation: bounceIn 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
+}
+
+/* Stagger children */
+.stagger > * {
+  animation: fadeUp var(--t-med) ease both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 50ms; }
+.stagger > *:nth-child(3) { animation-delay: 100ms; }
+.stagger > *:nth-child(4) { animation-delay: 150ms; }
+.stagger > *:nth-child(5) { animation-delay: 200ms; }
+.stagger > *:nth-child(6) { animation-delay: 250ms; }
+.stagger > *:nth-child(n+7) { animation-delay: 300ms; }
+
+/* Skeleton shimmer */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--surface-hover) 50%,
+    var(--surface) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.5s ease infinite;
+  border-radius: var(--r-sm);
+}

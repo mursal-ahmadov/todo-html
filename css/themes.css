@@ -1,0 +1,49 @@
+/* ============================================================
+   THEMES — light / dark / auto
+   Actual color variables are in tokens.css.
+   This file sets up auto-detection and smooth transitions.
+   ============================================================ */
+
+/* Smooth theme transitions */
+html {
+  transition:
+    color var(--t-med),
+    background-color var(--t-med);
+}
+
+/* Auto: follow OS preference unless overridden */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-gradient: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    --bg-mesh:
+      radial-gradient(at 20% 30%, #3730a3 0, transparent 50%),
+      radial-gradient(at 80% 70%, #831843 0, transparent 50%),
+      radial-gradient(at 50% 50%, #1e3a5f 0, transparent 50%);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --text-primary: #f1f5f9;
+    --text-secondary: rgba(241, 245, 249, 0.7);
+    --text-muted: rgba(241, 245, 249, 0.4);
+    --surface: rgba(255, 255, 255, 0.05);
+    --surface-hover: rgba(255, 255, 255, 0.09);
+    --surface-active: rgba(255, 255, 255, 0.14);
+    --divider: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Theme toggle button icon */
+[data-theme="dark"] .icon-sun,
+:not([data-theme="dark"]) .icon-moon {
+  display: block;
+}
+
+[data-theme="dark"] .icon-moon,
+:not([data-theme="dark"]) .icon-sun {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .icon-sun { display: block; }
+  :root:not([data-theme="light"]) .icon-moon { display: none; }
+}

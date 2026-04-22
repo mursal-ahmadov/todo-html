@@ -1,0 +1,80 @@
+/* ============================================================
+   BASE STYLES — body, typography, global
+   ============================================================ */
+
+body {
+  font-family: var(--font);
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: var(--text-primary);
+  background: var(--bg-gradient);
+  min-height: 100dvh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated mesh background */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--bg-mesh);
+  z-index: -1;
+  animation: meshMove 20s ease infinite alternate;
+}
+
+/* Typography scale */
+.text-xs   { font-size: var(--fs-xs);  line-height: var(--lh-snug); }
+.text-sm   { font-size: var(--fs-sm);  line-height: var(--lh-snug); }
+.text-base { font-size: var(--fs-base); }
+.text-lg   { font-size: var(--fs-lg);  line-height: var(--lh-snug); }
+.text-xl   { font-size: var(--fs-xl);  line-height: var(--lh-tight); }
+.text-2xl  { font-size: var(--fs-2xl); line-height: var(--lh-tight); }
+.text-3xl  { font-size: var(--fs-3xl); line-height: var(--lh-tight); }
+.text-4xl  { font-size: var(--fs-4xl); line-height: var(--lh-tight); }
+.text-5xl  { font-size: var(--fs-5xl); line-height: 1; }
+
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold   { font-weight: 700; }
+.font-display { font-family: var(--font-display); }
+.font-mono   { font-family: var(--font-mono); }
+.tabular-nums { font-variant-numeric: tabular-nums; }
+
+.text-primary   { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted     { color: var(--text-muted); }
+.text-accent    { color: var(--accent); }
+.text-success   { color: var(--success); }
+.text-warning   { color: var(--warning); }
+.text-danger    { color: var(--danger); }
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--divider);
+  border-radius: var(--r-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Selection */
+::selection {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent), #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

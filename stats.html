@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="az" data-theme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo — Statistika</title>
+  <link rel="manifest" href="/todo-html/manifest.webmanifest">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Todo">
+  <link rel="apple-touch-icon" href="/todo-html/assets/icons/icon-192.png">
+  <link rel="icon" href="/todo-html/assets/favicon.svg" type="image/svg+xml">
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/glass.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pages/stats.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "dayjs":         "https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js",
+      "marked":        "https://cdn.jsdelivr.net/npm/marked@11/lib/marked.esm.js",
+      "chart.js/auto": "https://cdn.jsdelivr.net/npm/chart.js@4/auto/auto.js",
+      "sortablejs":    "https://cdn.jsdelivr.net/npm/sortablejs@1/modular/sortable.esm.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="app-shell">
+    <div id="nav-root"></div>
+
+    <main class="main-content" role="main">
+      <h1 class="section-title" style="margin-bottom:var(--s-6)">📊 Statistika</h1>
+
+      <!-- Streak card -->
+      <div class="streak-card glass animate-fade-up">
+        <div class="streak-number gradient-text" id="stat-streak">—</div>
+        <div class="streak-label">Günlük seriya</div>
+        <div style="font-size:var(--fs-xs);color:var(--text-muted);margin-top:var(--s-1)">Ən yüksək: <span id="stat-best-streak">—</span></div>
+      </div>
+
+      <!-- Stat tiles -->
+      <div class="stats-grid">
+        <div class="stat-tile glass-sm animate-fade-up">
+          <div class="stat-tile-value" id="stat-total">—</div>
+          <div class="stat-tile-label">Ümumi task</div>
+        </div>
+        <div class="stat-tile glass-sm animate-fade-up" style="animation-delay:.05s">
+          <div class="stat-tile-value" id="stat-completed">—</div>
+          <div class="stat-tile-label">Tamamlanan</div>
+        </div>
+        <div class="stat-tile glass-sm animate-fade-up" style="animation-delay:.1s">
+          <div class="stat-tile-value" id="stat-pending">—</div>
+          <div class="stat-tile-label">Gözləyən</div>
+        </div>
+        <div class="stat-tile glass-sm animate-fade-up" style="animation-delay:.15s">
+          <div class="stat-tile-value" id="stat-overdue">—</div>
+          <div class="stat-tile-label">Gecikmiş</div>
+        </div>
+        <div class="stat-tile glass-sm animate-fade-up" style="animation-delay:.2s">
+          <div class="stat-tile-value" id="stat-done-today">—</div>
+          <div class="stat-tile-label">Bu gün tamamlandı</div>
+        </div>
+        <div class="stat-tile glass-sm animate-fade-up" style="animation-delay:.25s">
+          <div class="stat-tile-value" id="stat-rate">—</div>
+          <div class="stat-tile-label">Tamamlama nisbəti</div>
+        </div>
+      </div>
+
+      <!-- Weekly chart -->
+      <div class="chart-card glass animate-fade-up" style="animation-delay:.3s">
+        <h2 class="section-title" style="font-size:var(--fs-base);margin-bottom:var(--s-4)">Son 7 gün</h2>
+        <canvas id="chart-weekly" height="180"></canvas>
+      </div>
+
+      <!-- Category chart -->
+      <div class="chart-card glass animate-fade-up" style="animation-delay:.35s">
+        <h2 class="section-title" style="font-size:var(--fs-base);margin-bottom:var(--s-4)">Kateqoriya paylanması</h2>
+        <canvas id="chart-category" height="200"></canvas>
+      </div>
+
+      <!-- Heatmap -->
+      <div class="chart-card glass animate-fade-up" style="animation-delay:.4s">
+        <h2 class="section-title" style="font-size:var(--fs-base);margin-bottom:var(--s-4)">52 həftəlik fəaliyyət</h2>
+        <div id="heatmap" class="heatmap-grid" style="width:100%;aspect-ratio:7/1;"></div>
+        <div class="flex gap-2 align-center" style="margin-top:var(--s-3);font-size:var(--fs-xs);color:var(--text-muted)">
+          Az
+          <span style="width:12px;height:12px;border-radius:2px;background:var(--heat-0);"></span>
+          <span style="width:12px;height:12px;border-radius:2px;background:var(--heat-1);"></span>
+          <span style="width:12px;height:12px;border-radius:2px;background:var(--heat-2);"></span>
+          <span style="width:12px;height:12px;border-radius:2px;background:var(--heat-3);"></span>
+          <span style="width:12px;height:12px;border-radius:2px;background:var(--heat-4);"></span>
+          Çox
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="js/pages/stats.init.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/todo-html/service-worker.js').catch(console.error);
+    }
+  </script>
+</body>
+</html>

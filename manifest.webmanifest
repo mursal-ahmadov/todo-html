@@ -1,0 +1,51 @@
+{
+  "name": "Todo — Şəxsi Tapşırıq Meneceri",
+  "short_name": "Todo",
+  "description": "Glassmorphism dizaynlı, GitHub-a şifrəli sinxronizasiya ilə offline-first PWA todo tətbiqi",
+  "start_url": "/todo-html/index.html",
+  "scope": "/todo-html/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f0f1a",
+  "theme_color": "#6366f1",
+  "lang": "az",
+  "dir": "ltr",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/todo-html/assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/todo-html/assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/todo-html/assets/icons/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Yeni Task",
+      "short_name": "Yeni",
+      "description": "Tez yeni task əlavə et",
+      "url": "/todo-html/app.html",
+      "icons": [{ "src": "/todo-html/assets/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Pomodoro",
+      "short_name": "Pomodoro",
+      "description": "Pomodoro taymerini aç",
+      "url": "/todo-html/pomodoro.html",
+      "icons": [{ "src": "/todo-html/assets/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
