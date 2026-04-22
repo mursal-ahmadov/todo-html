@@ -1,0 +1,12 @@
+{
+  "version": 4,
+  "lists": [
+    {
+      "id": "main",
+      "name": "Əsas siyahı",
+      "color": "#c8ff57",
+      "createdAt": "2026-04-22T18:40:54.025Z"
+    }
+  ],
+  "todos": []
+}
