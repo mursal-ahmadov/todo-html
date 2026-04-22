@@ -1,5 +1,5 @@
-const CACHE_NAME = 'todo-app-v3';
-const ASSETS = ['./', './index.html', './manifest.json', './sw.js'];
+const CACHE_NAME = 'todo-app-v4';
+const ASSETS = ['./', './index.html', './manifest.json', './sw.js', './app.js'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)));

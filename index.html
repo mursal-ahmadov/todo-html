@@ -17,397 +17,639 @@
     --bg: #0f0f13;
     --surface: #18181f;
     --surface2: #22222c;
+    --surface3: #2c2c37;
     --border: rgba(255,255,255,0.07);
     --accent: #c8ff57;
     --accent-dim: rgba(200,255,87,0.12);
     --text: #f0f0f0;
-    --text-muted: rgba(240,240,240,0.4);
-    --text-dim: rgba(240,240,240,0.65);
+    --text-muted: rgba(240,240,240,0.42);
+    --text-dim: rgba(240,240,240,0.68);
     --danger: #ff5f57;
+    --danger-dim: rgba(255,95,87,0.15);
     --done-color: rgba(240,240,240,0.25);
-    --radius: 16px;
+    --radius: 18px;
     --radius-sm: 10px;
+    --shadow: 0 20px 60px rgba(0,0,0,0.28);
   }
 
   html { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
 
   body {
     min-height: 100dvh;
-    background: var(--bg);
+    background:
+      radial-gradient(circle at top right, rgba(200,255,87,0.08), transparent 32%),
+      radial-gradient(circle at top left, rgba(87,200,255,0.08), transparent 28%),
+      var(--bg);
     padding-bottom: env(safe-area-inset-bottom);
   }
 
-  /* ── SETUP SCREEN ── */
   #setup-screen {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 100dvh; padding: 32px 24px; gap: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    padding: 32px 24px;
+    gap: 28px;
   }
 
   .setup-logo { font-family: 'DM Serif Display', serif; font-size: 48px; color: var(--accent); line-height: 1; }
-  .setup-title { font-size: 22px; font-weight: 500; text-align: center; }
-  .setup-sub { font-size: 14px; color: var(--text-muted); text-align: center; line-height: 1.6; max-width: 320px; }
+  .setup-title { font-size: 24px; font-weight: 500; text-align: center; }
+  .setup-sub { font-size: 14px; color: var(--text-muted); text-align: center; line-height: 1.6; max-width: 360px; }
 
-  .setup-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 28px 24px; width: 100%; max-width: 400px;
-    display: flex; flex-direction: column; gap: 16px;
-  }
-
-  .setup-label { font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
-
-  .setup-input {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 14px 16px;
-    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
-    width: 100%; outline: none; font-family: monospace;
-    transition: border-color 0.2s;
-  }
-  .setup-input:focus { border-color: var(--accent); }
-  .setup-input::placeholder { color: var(--text-muted); font-family: 'DM Sans', sans-serif; }
-
-  .setup-hint {
-    font-size: 12px; color: var(--text-muted); line-height: 1.5;
-  }
-  .setup-hint a { color: var(--accent); text-decoration: none; }
-
-  .btn-primary {
-    background: var(--accent); color: #0f0f13; font-family: 'DM Sans', sans-serif;
-    font-size: 15px; font-weight: 500; border: none; border-radius: var(--radius-sm);
-    padding: 14px 24px; cursor: pointer; width: 100%; transition: opacity 0.2s;
-  }
-  .btn-primary:hover { opacity: 0.88; }
-  .btn-primary:active { transform: scale(0.98); }
-
-  /* ── MAIN APP ── */
-  #app { display: none; max-width: 600px; margin: 0 auto; padding: 0 0 120px; }
-
-  /* Header */
-  .app-header {
-    padding: 60px 24px 28px;
-    position: sticky; top: 0; z-index: 10;
-    background: linear-gradient(to bottom, var(--bg) 80%, transparent);
-  }
-
-  .header-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
-
-  .header-title { font-family: 'DM Serif Display', serif; font-size: 36px; line-height: 1; }
-  .header-title span { color: var(--accent); }
-
-  .header-date { font-size: 12px; color: var(--text-muted); font-weight: 300; padding-bottom: 4px; }
-
-  .header-actions { display: flex; gap: 8px; }
-
-  .icon-btn {
-    background: var(--surface); border: 1px solid var(--border);
-    width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; color: var(--text-dim);
-    transition: all 0.2s; flex-shrink: 0;
-  }
-  .icon-btn:hover { background: var(--surface2); color: var(--text); }
-
-  /* Stats */
-  .stats-bar {
-    padding: 0 24px 20px; display: flex; gap: 12px;
-  }
-
-  .stat-pill {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 100px; padding: 6px 14px; font-size: 12px;
-    color: var(--text-dim); display: flex; align-items: center; gap: 6px;
-  }
-  .stat-pill strong { color: var(--text); font-weight: 500; }
-  .stat-pill.accent { background: var(--accent-dim); border-color: rgba(200,255,87,0.2); }
-  .stat-pill.accent strong { color: var(--accent); }
-
-  /* Filter tabs */
-  .filter-tabs {
-    padding: 0 24px 20px; display: flex; gap: 8px;
-  }
-
-  .search-row {
-    padding: 0 24px 20px;
-  }
-
-  .search-input {
-    width: 100%;
+  .setup-card,
+  .calendar-shell,
+  .insight-panel,
+  .insight-card,
+  .modal,
+  .stat-pill,
+  .list-chip,
+  .view-tab,
+  .filter-tab,
+  .add-box,
+  .calendar-day,
+  .calendar-list-item {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 100px;
-    padding: 12px 16px;
+    box-shadow: var(--shadow);
+  }
+
+  .setup-card {
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .setup-label,
+  .section-title,
+  .field-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .setup-input,
+  .search-input,
+  .modal-input,
+  .opt-input,
+  .opt-select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
     color: var(--text);
     font-family: 'DM Sans', sans-serif;
     font-size: 14px;
+    width: 100%;
     outline: none;
-    transition: border-color 0.2s, background 0.2s;
   }
 
-  .search-input:focus {
-    border-color: rgba(200,255,87,0.35);
-    background: var(--surface2);
+  .setup-input,
+  .modal-input,
+  .opt-input,
+  .opt-select { transition: border-color 0.2s, background 0.2s; }
+  .setup-input:focus,
+  .search-input:focus,
+  .modal-input:focus,
+  .opt-input:focus,
+  .opt-select:focus { border-color: rgba(200,255,87,0.4); background: var(--surface3); }
+
+  .setup-hint,
+  .muted-note,
+  .settings-note { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+  .setup-hint a { color: var(--accent); text-decoration: none; }
+
+  .btn-primary,
+  .btn-secondary,
+  .list-add-btn,
+  .install-btn,
+  .add-btn {
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: transform 0.18s, opacity 0.18s, background 0.18s;
   }
 
-  .search-input::placeholder {
-    color: var(--text-muted);
+  .btn-primary,
+  .install-btn,
+  .add-btn {
+    background: var(--accent);
+    color: #0f0f13;
+    font-weight: 600;
   }
 
-  .filter-tab {
-    background: transparent; border: 1px solid var(--border);
-    border-radius: 100px; padding: 8px 16px;
-    color: var(--text-muted); font-family: 'DM Sans', sans-serif;
-    font-size: 13px; cursor: pointer; transition: all 0.2s;
-  }
-  .filter-tab:hover { border-color: rgba(255,255,255,0.2); color: var(--text-dim); }
-  .filter-tab.active {
-    background: var(--accent); border-color: var(--accent);
-    color: #0f0f13; font-weight: 500;
+  .btn-primary { padding: 14px 24px; width: 100%; }
+  .btn-secondary,
+  .list-add-btn { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary { padding: 12px; flex: 1; }
+  .btn-primary:hover,
+  .btn-secondary:hover,
+  .list-add-btn:hover,
+  .install-btn:hover,
+  .add-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  #app { display: none; max-width: 940px; margin: 0 auto; padding: 0 0 220px; }
+
+  .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 56px 24px 26px;
+    background: linear-gradient(to bottom, rgba(15,15,19,0.97) 78%, rgba(15,15,19,0));
+    backdrop-filter: blur(16px);
   }
 
-  /* Todo list */
-  .todo-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
+  .header-row,
+  .header-actions,
+  .stats-bar,
+  .filter-tabs,
+  .view-tabs,
+  .list-switcher,
+  .list-switch-scroll,
+  .todo-meta,
+  .todo-actions,
+  .modal-actions,
+  .summary-row,
+  .calendar-toolbar { display: flex; align-items: center; gap: 10px; }
+
+  .header-row { justify-content: space-between; align-items: flex-start; }
+  .header-title { font-family: 'DM Serif Display', serif; font-size: 42px; line-height: 0.95; letter-spacing: -0.03em; }
+  .header-title span { color: var(--accent); }
+  .header-date { font-size: 12px; color: var(--text-muted); margin-top: 10px; }
+
+  .icon-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    color: var(--text-dim);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+  }
+
+  .icon-btn:hover { background: var(--surface2); color: var(--text); transform: translateY(-1px); }
+
+  .list-switcher {
+    margin-top: 18px;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .list-switch-scroll {
+    overflow: auto hidden;
+    scrollbar-width: none;
+    flex: 1;
+    padding-bottom: 2px;
+  }
+
+  .list-switch-scroll::-webkit-scrollbar { display: none; }
+
+  .list-chip,
+  .view-tab,
+  .filter-tab,
+  .stat-pill,
+  .meta-badge,
+  .list-add-btn {
+    border-radius: 999px;
+  }
+
+  .list-chip,
+  .view-tab,
+  .filter-tab,
+  .list-add-btn {
+    padding: 9px 14px;
+    color: var(--text-dim);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .list-chip,
+  .view-tab,
+  .filter-tab,
+  .list-add-btn,
+  .action-btn,
+  .calendar-day { cursor: pointer; }
+
+  .list-chip.active,
+  .view-tab.active,
+  .filter-tab.active { background: var(--accent); border-color: var(--accent); color: #0f0f13; }
+
+  .list-chip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+  }
+
+  .view-tabs,
+  .stats-bar,
+  .filter-tabs,
+  .search-row { margin-top: 18px; flex-wrap: wrap; }
+
+  .search-input { border-radius: 999px; }
+
+  .stats-bar { gap: 8px; }
+  .stat-pill { padding: 8px 14px; font-size: 12px; color: var(--text-dim); }
+  .stat-pill strong { color: var(--text); font-weight: 600; }
+  .stat-pill.accent { background: var(--accent-dim); border-color: rgba(200,255,87,0.22); }
+  .stat-pill.accent strong { color: var(--accent); }
+  .stat-pill.danger { background: var(--danger-dim); border-color: rgba(255,95,87,0.28); }
+  .stat-pill.danger strong { color: var(--danger); }
+
+  .view-section { padding: 0 24px; }
+
+  .todo-list { display: flex; flex-direction: column; gap: 10px; }
 
   .todo-item {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px;
-    display: flex; align-items: flex-start; gap: 12px;
-    animation: slideIn 0.25s ease; cursor: default;
-    transition: border-color 0.2s, background 0.2s;
-    position: relative; overflow: hidden;
+    position: relative;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 16px 16px 16px 18px;
+    border-radius: var(--radius);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    overflow: hidden;
   }
-  .todo-item:hover { border-color: rgba(255,255,255,0.12); }
+
+  .todo-item:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-1px); }
   .todo-item.done { background: rgba(255,255,255,0.02); }
   .todo-item.done .todo-text { color: var(--done-color); text-decoration: line-through; }
-
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .todo-item.sortable { cursor: grab; }
 
   .priority-bar {
-    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
     border-radius: 16px 0 0 16px;
   }
+
   .priority-bar.high { background: #ff5f57; }
   .priority-bar.mid { background: #ffb347; }
   .priority-bar.low { background: #57c8ff; }
 
+  .drag-handle {
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1;
+    padding-top: 2px;
+    user-select: none;
+  }
+
   .check-btn {
-    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; cursor: pointer;
-    border: 1.5px solid rgba(255,255,255,0.2); background: transparent;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s; margin-top: 1px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.2s;
   }
+
   .check-btn:hover { border-color: var(--accent); }
-  .todo-item.done .check-btn {
-    background: var(--accent); border-color: var(--accent);
-  }
+  .check-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+  .todo-item.done .check-btn { background: var(--accent); border-color: var(--accent); }
   .check-btn svg { opacity: 0; transition: opacity 0.2s; }
   .todo-item.done .check-btn svg { opacity: 1; }
 
   .todo-content { flex: 1; min-width: 0; }
-
-  .todo-text {
-    font-size: 15px; line-height: 1.5; color: var(--text); word-break: break-word;
-    transition: color 0.2s;
-  }
-
-  .todo-meta {
-    display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap;
-  }
-
+  .todo-text { font-size: 15px; line-height: 1.5; word-break: break-word; }
+  .todo-meta { flex-wrap: wrap; margin-top: 8px; gap: 6px; }
   .todo-time { font-size: 11px; color: var(--text-muted); }
 
-  .todo-tag {
-    font-size: 11px; padding: 2px 8px; border-radius: 100px;
-    background: var(--surface2); color: var(--text-muted); font-weight: 400;
+  .meta-badge {
+    padding: 4px 9px;
+    font-size: 11px;
+    background: var(--surface2);
+    color: var(--text-dim);
+    border: 1px solid rgba(255,255,255,0.04);
   }
 
-  .todo-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.2s; }
-  .todo-item:hover .todo-actions { opacity: 1; }
+  .meta-badge.is-accent { background: var(--accent-dim); color: var(--accent); }
+  .meta-badge.is-danger { background: var(--danger-dim); color: var(--danger); }
 
+  .todo-actions { flex-shrink: 0; }
   .action-btn {
-    width: 28px; height: 28px; border-radius: 8px; cursor: pointer;
-    border: none; background: transparent; color: var(--text-muted);
-    display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--text-muted);
+    transition: background 0.18s, color 0.18s;
   }
   .action-btn:hover { background: var(--surface2); color: var(--text); }
-  .action-btn.delete:hover { background: rgba(255,95,87,0.12); color: var(--danger); }
+  .action-btn.delete:hover { background: var(--danger-dim); color: var(--danger); }
 
-  /* Empty state */
   .empty-state {
-    text-align: center; padding: 64px 24px; color: var(--text-muted);
-    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    text-align: center;
+    padding: 58px 22px;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
   }
+
   .empty-icon { font-size: 40px; opacity: 0.4; }
   .empty-text { font-size: 15px; }
 
-  /* Add todo floating */
+  .calendar-shell,
+  .insight-panel,
+  .insight-card { border-radius: var(--radius); }
+
+  .calendar-shell { padding: 18px; }
+  .calendar-toolbar { justify-content: space-between; margin-bottom: 14px; }
+  .calendar-label { font-size: 15px; font-weight: 500; }
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .calendar-head {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    padding-bottom: 6px;
+  }
+
+  .calendar-day {
+    min-height: 78px;
+    border-radius: 14px;
+    padding: 10px 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: var(--text);
+    transition: border-color 0.2s, transform 0.18s;
+  }
+
+  .calendar-day:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.12); }
+  .calendar-day.active { border-color: var(--accent); background: var(--accent-dim); }
+  .calendar-day.today { box-shadow: inset 0 0 0 1px rgba(200,255,87,0.32); }
+  .calendar-day.outside { opacity: 0.4; }
+  .calendar-day-num { font-size: 14px; text-align: left; }
+  .calendar-day-count { font-size: 11px; color: var(--text-muted); text-align: left; }
+
+  .calendar-day-list {
+    margin-top: 18px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .calendar-list-item {
+    padding: 14px 16px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .calendar-list-item strong { font-size: 14px; }
+  .calendar-list-item span { font-size: 12px; color: var(--text-muted); }
+
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .insight-card,
+  .insight-panel { padding: 18px; }
+  .insight-label { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+  .insight-value { font-size: 34px; font-family: 'DM Serif Display', serif; }
+
+  .bar-row,
+  .summary-row { display: grid; gap: 8px; margin-top: 12px; }
+  .bar-label,
+  .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+
+  .bar-track {
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.05);
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #57c8ff);
+    border-radius: 999px;
+  }
+
   .add-area {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
-    background: linear-gradient(to top, var(--bg) 70%, transparent);
+    position: fixed;
+    inset: auto 0 0;
     z-index: 20;
+    padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, rgba(15,15,19,0.98) 62%, rgba(15,15,19,0));
+    backdrop-filter: blur(16px);
   }
 
-  .add-inner {
-    max-width: 600px; margin: 0 auto;
-  }
-
-  .add-row {
-    display: flex; gap: 8px; align-items: flex-end;
-  }
+  .add-inner { max-width: 940px; margin: 0 auto; }
+  .add-row { display: flex; gap: 10px; align-items: flex-end; }
 
   .add-box {
-    flex: 1; background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); overflow: hidden; transition: border-color 0.2s;
+    flex: 1;
+    border-radius: var(--radius);
+    overflow: hidden;
   }
-  .add-box:focus-within { border-color: rgba(200,255,87,0.4); }
 
   .add-input {
-    background: transparent; border: none; outline: none;
-    width: 100%; padding: 14px 16px; color: var(--text);
-    font-family: 'DM Sans', sans-serif; font-size: 15px;
-    resize: none; line-height: 1.4; max-height: 100px;
+    width: 100%;
+    background: transparent;
+    color: var(--text);
+    border: none;
+    outline: none;
+    padding: 16px 16px 10px;
+    resize: none;
+    line-height: 1.45;
+    max-height: 120px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
   }
+
   .add-input::placeholder { color: var(--text-muted); }
 
   .add-options {
-    padding: 0 12px 10px; display: flex; align-items: center; gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 0 12px 12px;
   }
 
-  .opt-select {
-    background: transparent; border: none; outline: none;
-    color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 12px;
-    cursor: pointer; padding: 4px 0;
-  }
+  .field-stack { display: grid; gap: 6px; }
   .opt-select option { background: var(--surface2); color: var(--text); }
 
-  .opt-divider { width: 1px; height: 14px; background: var(--border); }
-
   .add-btn {
-    width: 50px; height: 50px; border-radius: var(--radius); flex-shrink: 0;
-    background: var(--accent); border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    color: #0f0f13; transition: all 0.2s; align-self: flex-end;
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+    border-radius: 16px;
   }
-  .add-btn:hover { opacity: 0.88; transform: scale(1.04); }
-  .add-btn:active { transform: scale(0.96); }
 
-  /* Toast */
   .toast {
-    position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 100px; padding: 10px 20px; font-size: 13px; color: var(--text);
-    z-index: 999; opacity: 0; transition: all 0.3s; white-space: nowrap;
+    position: fixed;
+    left: 50%;
+    bottom: 118px;
+    transform: translateX(-50%) translateY(20px);
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 13px;
+    opacity: 0;
     pointer-events: none;
+    transition: opacity 0.24s, transform 0.24s;
+    z-index: 999;
   }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  .toast.success { border-color: rgba(200,255,87,0.3); color: var(--accent); }
-  .toast.error { border-color: rgba(255,95,87,0.3); color: var(--danger); }
 
-  /* Install banner */
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.success { border-color: rgba(200,255,87,0.28); color: var(--accent); }
+  .toast.error { border-color: rgba(255,95,87,0.28); color: var(--danger); }
+
   .install-banner {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: var(--surface); border-bottom: 1px solid var(--border);
-    padding: 14px 20px; display: none; gap: 12px; align-items: center;
-    padding-top: calc(14px + env(safe-area-inset-top));
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 100;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: calc(14px + env(safe-area-inset-top)) 20px 14px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
   }
+
   .install-banner.visible { display: flex; }
-  .install-banner-icon { font-size: 24px; }
   .install-banner-text { flex: 1; }
   .install-banner-title { font-size: 14px; font-weight: 500; }
   .install-banner-sub { font-size: 12px; color: var(--text-muted); }
-  .install-btn {
-    background: var(--accent); color: #0f0f13; border: none;
-    border-radius: var(--radius-sm); padding: 8px 16px;
-    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
-    cursor: pointer; flex-shrink: 0;
-  }
   .install-close {
-    background: none; border: none; color: var(--text-muted);
-    cursor: pointer; font-size: 18px; padding: 4px; flex-shrink: 0;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 18px;
+    cursor: pointer;
   }
 
-  /* Sync indicator */
-  .sync-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--accent); display: inline-block;
-    animation: pulse 1.5s infinite;
+  .sync-dot,
+  .pending-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
   }
+
+  .sync-dot { background: var(--accent); animation: pulse 1.5s infinite; }
+  .pending-dot { background: #57c8ff; }
+
   @keyframes pulse {
     0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.7); }
+    50% { opacity: 0.45; transform: scale(0.72); }
   }
 
-  /* Modal */
   .modal-overlay {
-    position: fixed; inset: 0; z-index: 50;
-    background: rgba(0,0,0,0.7); display: none;
-    align-items: center; justify-content: center; padding: 24px;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 28px 24px; width: 100%; max-width: 400px;
-    display: flex; flex-direction: column; gap: 20px;
-  }
-  .modal-title { font-size: 18px; font-weight: 500; }
-  .modal-input {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 12px 14px;
-    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
-    width: 100%; outline: none;
-  }
-  .modal-input:focus { border-color: var(--accent); }
-  .modal-actions { display: flex; gap: 10px; }
-  .btn-secondary {
-    flex: 1; background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 12px; color: var(--text);
-    font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer;
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0,0,0,0.7);
   }
 
-  /* Loader */
-  .loader {
-    display: flex; align-items: center; justify-content: center;
-    gap: 8px; padding: 40px; color: var(--text-muted); font-size: 14px;
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    width: min(100%, 520px);
+    border-radius: var(--radius);
+    padding: 24px;
+    display: grid;
+    gap: 16px;
   }
+
+  .modal-title { font-size: 18px; font-weight: 600; }
+  .modal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+  .loader {
+    padding: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--text-muted);
+  }
+
   .spinner {
-    width: 18px; height: 18px; border: 2px solid var(--border);
-    border-top-color: var(--accent); border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.12);
+    border-top-color: var(--accent);
     animation: spin 0.7s linear infinite;
   }
+
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  @media (max-width: 480px) {
+  @media (max-width: 780px) {
+    #app { padding-bottom: 280px; }
+    .header-title { font-size: 34px; }
+    .insights-grid,
+    .add-options,
+    .modal-grid { grid-template-columns: 1fr; }
+    .calendar-grid { gap: 6px; }
+  }
+
+  @media (max-width: 560px) {
     .app-header { padding-top: 48px; }
-    .header-title { font-size: 30px; }
+    .header-row { flex-direction: column; gap: 16px; }
+    .header-actions { width: 100%; justify-content: flex-end; }
+    .list-switcher { flex-direction: column; }
+    .calendar-day { min-height: 68px; }
+    .todo-item { padding-right: 12px; }
+    .todo-actions { flex-direction: column; }
   }
 </style>
 </head>
 <body>
-
-<!-- SETUP -->
 <div id="setup-screen">
-  <div>
-    <div class="setup-logo">✓</div>
-  </div>
+  <div><div class="setup-logo">✓</div></div>
   <div style="text-align:center">
     <div class="setup-title">Todo tətbiqi</div>
-    <div class="setup-sub" style="margin-top:8px">GitHub-da məlumatlarını saxlamaq üçün bir dəfə token daxil et</div>
+    <div class="setup-sub" style="margin-top:8px">Bir tokenlə həm telefondan, həm kompdən gir. Data GitHub-da saxlanır, yeni çoxlu siyahı və planlama funksiyaları aktivdir.</div>
   </div>
   <div class="setup-card">
     <div class="setup-label">GitHub Personal Access Token</div>
     <input type="password" class="setup-input" id="token-input" placeholder="ghp_xxxxxxxxxxxx">
-    <div class="setup-hint">
-      Token yaratmaq üçün: <a href="https://github.com/settings/tokens/new?scopes=repo&description=Todo+App" target="_blank">github.com/settings/tokens</a> → <strong>repo</strong> icazəsi seç
-    </div>
+    <div class="setup-hint">Token yaratmaq üçün: <a href="https://github.com/settings/tokens/new?scopes=repo&description=Todo+App" target="_blank">github.com/settings/tokens</a> → <strong>repo</strong> icazəsi seç</div>
     <button class="btn-primary" onclick="saveToken()">Daxil ol</button>
   </div>
-  <div class="setup-hint" style="text-align:center; max-width:320px">
-    Token yalnız bu cihazda saxlanır. Heç bir serverə göndərilmir.
-  </div>
+  <div class="setup-hint" style="text-align:center; max-width:340px">Token yalnız bu cihazda saxlanır. Data repo ayarını sonradan dəyişə bilərsən.</div>
 </div>
 
-<!-- INSTALL BANNER -->
 <div class="install-banner" id="install-banner">
   <div class="install-banner-icon">📱</div>
   <div class="install-banner-text">
@@ -418,80 +660,132 @@
   <button class="install-close" onclick="dismissInstall()">✕</button>
 </div>
 
-<!-- MAIN APP -->
 <div id="app">
   <div class="app-header">
     <div class="header-row">
       <div>
-        <div class="header-title">Tapşırıqlar <span id="sync-indicator"></span></div>
+        <div class="header-title">Plan <span id="sync-indicator"></span></div>
         <div class="header-date" id="header-date"></div>
       </div>
       <div class="header-actions">
-        <button class="icon-btn" onclick="refreshTodos()" title="Yenilə">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <button class="icon-btn" onclick="showSettings()" title="Ayarlar">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
-          </svg>
-        </button>
+        <button class="icon-btn" onclick="refreshTodos()" title="Yenilə">↻</button>
+        <button class="icon-btn" onclick="copyShareLink()" title="Paylaş">⤴</button>
+        <button class="icon-btn" onclick="showSettings()" title="Ayarlar">⚙</button>
       </div>
     </div>
-    <div class="stats-bar" id="stats-bar" style="padding-left:0; padding-top:16px"></div>
-    <div class="filter-tabs" style="padding-left:0">
-      <button class="filter-tab active" onclick="setFilter('all', this)">Hamısı</button>
-      <button class="filter-tab" onclick="setFilter('active', this)">Aktiv</button>
-      <button class="filter-tab" onclick="setFilter('done', this)">Tamamlandı</button>
+
+    <div class="list-switcher" id="list-switcher"></div>
+
+    <div class="view-tabs">
+      <button class="view-tab active" data-view="list" onclick="setView('list', this)">Siyahı</button>
+      <button class="view-tab" data-view="calendar" onclick="setView('calendar', this)">Təqvim</button>
+      <button class="view-tab" data-view="insights" onclick="setView('insights', this)">Statistika</button>
     </div>
-    <div class="search-row" style="padding-left:0">
-      <input class="search-input" id="search-input" type="search" placeholder="Tapşırıq və ya etiket axtar...">
+
+    <div class="stats-bar" id="stats-bar"></div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="setFilter('all', this)">Hamısı</button>
+      <button class="filter-tab" onclick="setFilter('active', this)">Açıq</button>
+      <button class="filter-tab" onclick="setFilter('done', this)">Bitən</button>
+      <button class="filter-tab" onclick="setFilter('archive', this)">Arxiv</button>
+      <button class="filter-tab" onclick="setFilter('trash', this)">Zibil</button>
+    </div>
+
+    <div class="search-row">
+      <input class="search-input" id="search-input" type="search" placeholder="Mətn, etiket və ya kateqoriya axtar...">
     </div>
   </div>
 
-  <div class="todo-list" id="todo-list">
-    <div class="loader"><div class="spinner"></div> Yüklənir...</div>
+  <div class="view-section" id="list-section">
+    <div class="todo-list" id="todo-list">
+      <div class="loader"><div class="spinner"></div> Yüklənir...</div>
+    </div>
+  </div>
+
+  <div class="view-section" id="calendar-section" style="display:none">
+    <div class="calendar-shell">
+      <div class="calendar-toolbar">
+        <button class="icon-btn" onclick="changeCalendarMonth(-1)">←</button>
+        <div class="calendar-label" id="calendar-label"></div>
+        <button class="icon-btn" onclick="changeCalendarMonth(1)">→</button>
+      </div>
+      <div class="calendar-grid" id="calendar-grid"></div>
+      <div class="calendar-day-list" id="calendar-day-list"></div>
+    </div>
+  </div>
+
+  <div class="view-section" id="insights-section" style="display:none">
+    <div class="insights-grid" id="insights-grid"></div>
   </div>
 </div>
 
-<!-- ADD AREA -->
 <div class="add-area" id="add-area" style="display:none">
   <div class="add-inner">
     <div class="add-row">
       <div class="add-box">
         <textarea class="add-input" id="add-input" placeholder="Yeni tapşırıq əlavə et..." rows="1"></textarea>
         <div class="add-options">
-          <select class="opt-select" id="priority-select">
-            <option value="low">🔵 Aşağı</option>
-            <option value="mid" selected>🟡 Orta</option>
-            <option value="high">🔴 Yüksək</option>
-          </select>
-          <div class="opt-divider"></div>
-          <input class="opt-select" type="text" id="tag-input" placeholder="#etiket" style="font-size:12px; width:80px; font-family:'DM Sans',sans-serif;">
+          <div class="field-stack">
+            <div class="field-label">Prioritet</div>
+            <select class="opt-select" id="priority-select">
+              <option value="low">Aşağı</option>
+              <option value="mid" selected>Orta</option>
+              <option value="high">Yüksək</option>
+            </select>
+          </div>
+          <div class="field-stack">
+            <div class="field-label">Etiket</div>
+            <input class="opt-input" type="text" id="tag-input" placeholder="#etiket">
+          </div>
+          <div class="field-stack">
+            <div class="field-label">Kateqoriya</div>
+            <input class="opt-input" type="text" id="category-input" placeholder="iş, şəxsi, alış-veriş...">
+          </div>
+          <div class="field-stack">
+            <div class="field-label">Tarix</div>
+            <input class="opt-input" type="date" id="due-input">
+          </div>
+          <div class="field-stack">
+            <div class="field-label">Xatırlatma</div>
+            <input class="opt-input" type="datetime-local" id="reminder-input">
+          </div>
+          <div class="field-stack">
+            <div class="field-label">Təkrar</div>
+            <select class="opt-select" id="repeat-select">
+              <option value="none">Təkrar yoxdur</option>
+              <option value="daily">Hər gün</option>
+              <option value="weekly">Həftəlik</option>
+              <option value="monthly">Aylıq</option>
+            </select>
+          </div>
         </div>
       </div>
-      <button class="add-btn" onclick="addTodo()">
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-        </svg>
-      </button>
+      <button class="add-btn" onclick="addTodo()">+</button>
     </div>
   </div>
 </div>
 
-<!-- EDIT MODAL -->
 <div class="modal-overlay" id="edit-modal">
   <div class="modal">
     <div class="modal-title">Tapşırığı düzəlt</div>
-    <textarea class="modal-input" id="edit-input" rows="3" style="resize:none;line-height:1.5"></textarea>
-    <div style="display:flex;gap:8px">
-      <select class="modal-input" id="edit-priority" style="flex:1">
-        <option value="low">🔵 Aşağı</option>
-        <option value="mid">🟡 Orta</option>
-        <option value="high">🔴 Yüksək</option>
+    <textarea class="modal-input" id="edit-input" rows="4" style="resize:none; line-height:1.5"></textarea>
+    <div class="modal-grid">
+      <select class="modal-input" id="edit-priority">
+        <option value="low">Aşağı</option>
+        <option value="mid">Orta</option>
+        <option value="high">Yüksək</option>
       </select>
-      <input class="modal-input" type="text" id="edit-tag" placeholder="#etiket" style="flex:1">
+      <input class="modal-input" type="text" id="edit-tag" placeholder="etiket">
+      <input class="modal-input" type="text" id="edit-category" placeholder="kateqoriya">
+      <select class="modal-input" id="edit-repeat">
+        <option value="none">Təkrar yoxdur</option>
+        <option value="daily">Hər gün</option>
+        <option value="weekly">Həftəlik</option>
+        <option value="monthly">Aylıq</option>
+      </select>
+      <input class="modal-input" type="date" id="edit-due">
+      <input class="modal-input" type="datetime-local" id="edit-reminder">
     </div>
     <div class="modal-actions">
       <button class="btn-secondary" onclick="closeEditModal()">Ləğv et</button>
@@ -500,21 +794,45 @@
   </div>
 </div>
 
-<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="list-modal">
+  <div class="modal">
+    <div class="modal-title">Yeni siyahı</div>
+    <input class="modal-input" id="list-name-input" type="text" placeholder="Məsələn: Alış-veriş">
+    <input class="modal-input" id="list-color-input" type="color" value="#c8ff57" style="height:48px; padding:6px;">
+    <div class="muted-note">Paylaş düyməsi həmin siyahı üçün ayrıca link kopyalayır.</div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeListModal()">Bağla</button>
+      <button class="btn-primary" style="flex:1" onclick="createList()">Yarat</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="settings-modal">
   <div class="modal">
     <div class="modal-title">Ayarlar</div>
-    <div>
-      <div class="setup-label" style="margin-bottom:8px">GitHub Token</div>
-      <input type="password" class="modal-input" id="settings-token" placeholder="Yeni token daxil et">
+    <div class="field-stack">
+      <div class="field-label">GitHub Token</div>
+      <input type="password" class="modal-input" id="settings-token" placeholder="ghp_xxxxxxxxxxxx">
     </div>
-    <div style="font-size:12px; color:var(--text-muted)">
-      Repo: <strong style="color:var(--text)">mursal-ahmadov/todo-html</strong><br>
-      Məlumatlar: <strong style="color:var(--text)">/data/todos.json</strong>
+    <div class="modal-grid">
+      <div class="field-stack">
+        <div class="field-label">Data repo</div>
+        <input class="modal-input" id="settings-data-repo" type="text" placeholder="owner/repo">
+      </div>
+      <div class="field-stack">
+        <div class="field-label">Data faylı</div>
+        <input class="modal-input" id="settings-data-file" type="text" placeholder="data/todos.json">
+      </div>
     </div>
+    <div class="settings-note" id="settings-repo-note"></div>
+    <div class="summary-row">
+      <span id="notification-status">Bildiriş statusu</span>
+      <button class="btn-secondary" id="notification-btn" onclick="enableNotifications()">Aktiv et</button>
+    </div>
+    <div class="muted-note">Sayt repo-su public ola bilər. Qeydlərin gizli qalması üçün data repo-nu ayrıca private repo ilə dəyişə bilərsən.</div>
     <div class="modal-actions">
       <button class="btn-secondary" onclick="closeSettings()">Bağla</button>
-      <button class="btn-primary" style="flex:1" onclick="updateToken()">Yadda saxla</button>
+      <button class="btn-primary" style="flex:1" onclick="updateSettings()">Yadda saxla</button>
     </div>
   </div>
 </div>
@@ -522,406 +840,21 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ── CONFIG ──
-const REPO = 'mursal-ahmadov/todo-html';
-const FILE = 'data/todos.json';
-const API  = `https://api.github.com/repos/${REPO}/contents/${FILE}`;
-const CACHE_KEY = 'todo_cache_v2';
-const LAST_SYNC_KEY = 'todo_last_sync';
-const AUTO_SYNC_MS = 45000;
-
-// ── STATE ──
-let todos = [];
-let fileSha = null;
-let filter  = 'all';
-let editId  = null;
-let deferredPrompt = null;
-let syncing = false;
-let autoSyncTimer = null;
-let searchTerm = '';
-let lastRemoteSync = localStorage.getItem(LAST_SYNC_KEY) || null;
-
-// ── INIT ──
-window.addEventListener('load', () => {
-  registerSW();
-  setDate();
-
-  const token = getToken();
-  if (token) {
-    showApp();
-    hydrateFromCache();
-    loadTodos({ silent: todos.length > 0 });
-    initAutoSync();
-  }
-});
-
-function registerSW() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
-  }
-}
-
-function setDate() {
-  const el = document.getElementById('header-date');
-  if (el) {
-    const dateText = new Date().toLocaleDateString('az-AZ', { weekday:'long', day:'numeric', month:'long' });
-    if (lastRemoteSync) {
-      const syncText = new Date(lastRemoteSync).toLocaleTimeString('az-AZ', { hour:'2-digit', minute:'2-digit' });
-      el.textContent = `${dateText} • Son sync ${syncText}`;
-      return;
-    }
-    el.textContent = dateText;
-  }
-}
-
-function hydrateFromCache() {
-  try {
-    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '[]');
-    if (Array.isArray(cached) && cached.length) {
-      todos = cached;
-      renderTodos();
-      renderStats();
-    }
-  } catch {
-    localStorage.removeItem(CACHE_KEY);
-  }
-}
-
-function cacheTodos() {
-  localStorage.setItem(CACHE_KEY, JSON.stringify(todos));
-}
-
-function markSynced() {
-  lastRemoteSync = new Date().toISOString();
-  localStorage.setItem(LAST_SYNC_KEY, lastRemoteSync);
-  setDate();
-}
-
-function initAutoSync() {
-  if (autoSyncTimer) return;
-  autoSyncTimer = window.setInterval(() => {
-    if (document.visibilityState === 'visible' && navigator.onLine && getToken() && !syncing) {
-      loadTodos({ silent: true });
-    }
-  }, AUTO_SYNC_MS);
-}
-
-// ── TOKEN ──
-function getToken() { return localStorage.getItem('gh_token'); }
-function setToken(t) { localStorage.setItem('gh_token', t); }
-
-function saveToken() {
-  const t = document.getElementById('token-input').value.trim();
-  if (!t) return toast('Token daxil et', 'error');
-  setToken(t);
-  showApp();
-  hydrateFromCache();
-  loadTodos();
-  initAutoSync();
-}
-
-function showApp() {
-  document.getElementById('setup-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('add-area').style.display = 'block';
-}
-
-function updateToken() {
-  const t = document.getElementById('settings-token').value.trim();
-  if (t) { setToken(t); toast('Token yeniləndi ✓', 'success'); }
-  closeSettings();
-}
-
-// ── GITHUB API ──
-async function ghFetch(method, body) {
-  const token = getToken();
-  const opts = {
-    method,
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/vnd.github+json'
-    }
-  };
-  if (body) opts.body = JSON.stringify(body);
-  const res = await fetch(API, opts);
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    const error = new Error(err.message || `HTTP ${res.status}`);
-    error.status = res.status;
-    throw error;
-  }
-  return res.json();
-}
-
-async function refreshFileSha() {
-  try {
-    const data = await ghFetch('GET');
-    fileSha = data.sha;
-  } catch (e) {
-    if (e.status === 404) {
-      fileSha = null;
-      return;
-    }
-    throw e;
-  }
-}
-
-async function loadTodos(options = {}) {
-  const { silent = false } = options;
-  if (!getToken() || syncing) return;
-  setSyncing(true);
-  try {
-    const data = await ghFetch('GET');
-    fileSha = data.sha;
-    const content = atob(data.content.replace(/\n/g, ''));
-    todos = JSON.parse(content);
-    cacheTodos();
-    markSynced();
-  } catch(e) {
-    if (e.status === 404) {
-      todos = Array.isArray(todos) ? todos : [];
-      cacheTodos();
-      await saveTodos(true);
-    } else {
-      if (!silent) {
-        toast('Bulud versiyası yüklənmədi, lokal nüsxə açıldı', 'error');
-      }
-    }
-  } finally {
-    setSyncing(false);
-    renderTodos();
-    renderStats();
-  }
-}
-
-async function saveTodos(silent = false, attempt = 0) {
-  cacheTodos();
-  setSyncing(true);
-  try {
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(todos, null, 2))));
-    const body = {
-      message: `Todo yeniləndi — ${new Date().toLocaleString('az-AZ')}`,
-      content,
-    };
-    if (fileSha) body.sha = fileSha;
-    const res = await ghFetch('PUT', body);
-    fileSha = res.content.sha;
-    markSynced();
-    if (!silent) toast('Yadda saxlandı ✓', 'success');
-  } catch(e) {
-    if (attempt === 0 && (e.status === 409 || /sha|conflict/i.test(e.message))) {
-      await refreshFileSha();
-      return saveTodos(silent, attempt + 1);
-    }
-    if (!silent) toast('Saxlama xətası: ' + e.message, 'error');
-  } finally {
-    setSyncing(false);
-    renderStats();
-  }
-}
-
-// ── CRUD ──
-async function addTodo() {
-  const input = document.getElementById('add-input');
-  const text = input.value.trim();
-  if (!text) return;
-
-  const priority = document.getElementById('priority-select').value;
-  const tag = document.getElementById('tag-input').value.trim().replace(/^#/, '');
-
-  const todo = {
-    id: Date.now().toString(),
-    text,
-    done: false,
-    priority,
-    tag: tag || null,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
-
-  todos.unshift(todo);
-  input.value = '';
-  document.getElementById('tag-input').value = '';
-  input.style.height = 'auto';
-
-  renderTodos();
-  renderStats();
-  await saveTodos();
-}
-
-async function toggleTodo(id) {
-  const t = todos.find(t => t.id === id);
-  if (!t) return;
-  t.done = !t.done;
-  t.updatedAt = new Date().toISOString();
-  renderTodos();
-  renderStats();
-  await saveTodos();
-}
-
-async function deleteTodo(id) {
-  todos = todos.filter(t => t.id !== id);
-  renderTodos();
-  renderStats();
-  await saveTodos();
-}
-
-function openEdit(id) {
-  const t = todos.find(t => t.id === id);
-  if (!t) return;
-  editId = id;
-  document.getElementById('edit-input').value = t.text;
-  document.getElementById('edit-priority').value = t.priority;
-  document.getElementById('edit-tag').value = t.tag ? '#' + t.tag : '';
-  document.getElementById('edit-modal').classList.add('open');
-}
-
-async function saveEdit() {
-  const text = document.getElementById('edit-input').value.trim();
-  if (!text) return;
-  const t = todos.find(t => t.id === editId);
-  if (!t) return;
-  t.text = text;
-  t.priority = document.getElementById('edit-priority').value;
-  const tag = document.getElementById('edit-tag').value.trim().replace(/^#/, '');
-  t.tag = tag || null;
-  t.updatedAt = new Date().toISOString();
-  closeEditModal();
-  renderTodos();
-  renderStats();
-  await saveTodos();
-}
-
-function closeEditModal() {
-  document.getElementById('edit-modal').classList.remove('open');
-  editId = null;
-}
-
-async function refreshTodos() { await loadTodos(); }
-
-// ── RENDER ──
-function getFiltered() {
-  let filtered = todos;
-  if (filter === 'active') filtered = filtered.filter(t => !t.done);
-  if (filter === 'done') filtered = filtered.filter(t => t.done);
-
-  const query = searchTerm.trim().toLowerCase();
-  if (!query) return filtered;
-
-  return filtered.filter(t => {
-    const text = (t.text || '').toLowerCase();
-    const tag = (t.tag || '').toLowerCase();
-    return text.includes(query) || tag.includes(query);
-  });
-}
-
-function renderTodos() {
-  const list = document.getElementById('todo-list');
-  const filtered = getFiltered();
-
-  if (!filtered.length) {
-    const msgs = { all: 'Heç bir tapşırıq yoxdur', active: 'Aktiv tapşırıq yoxdur', done: 'Tamamlanan yoxdur' };
-    const message = searchTerm.trim() ? 'Axtarışa uyğun tapşırıq yoxdur' : msgs[filter];
-    list.innerHTML = `<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">${message}</div></div>`;
-    return;
-  }
-
-  list.innerHTML = filtered.map(t => {
-    const time = new Date(t.createdAt).toLocaleDateString('az-AZ', { day:'numeric', month:'short' });
-    const tagEl = t.tag ? `<span class="todo-tag">#${t.tag}</span>` : '';
-    return `
-    <div class="todo-item ${t.done ? 'done' : ''}">
-      <div class="priority-bar ${t.priority}"></div>
-      <button class="check-btn" onclick="toggleTodo('${t.id}')">
-        <svg width="12" height="12" fill="none" stroke="#0f0f13" stroke-width="2.5" viewBox="0 0 24 24">
-          <polyline points="20 6 9 17 4 12"/>
-        </svg>
-      </button>
-      <div class="todo-content">
-        <div class="todo-text">${escHtml(t.text)}</div>
-        <div class="todo-meta">
-          <span class="todo-time">${time}</span>
-          ${tagEl}
-        </div>
-      </div>
-      <div class="todo-actions">
-        <button class="action-btn" onclick="openEdit('${t.id}')" title="Düzəlt">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-          </svg>
-        </button>
-        <button class="action-btn delete" onclick="deleteTodo('${t.id}')" title="Sil">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6m5 0V4h4v2"/>
-          </svg>
-        </button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function renderStats() {
-  const total = todos.length;
-  const done  = todos.filter(t => t.done).length;
-  const active = total - done;
-  const syncLabel = lastRemoteSync
-    ? new Date(lastRemoteSync).toLocaleTimeString('az-AZ', { hour:'2-digit', minute:'2-digit' })
-    : 'lokal';
-  const el = document.getElementById('stats-bar');
-  el.innerHTML = `
-    <div class="stat-pill accent"><strong>${active}</strong> aktiv</div>
-    <div class="stat-pill"><strong>${done}</strong> tamamlandı</div>
-    <div class="stat-pill"><strong>${total}</strong> cəmi</div>
-    <div class="stat-pill"><strong>${syncLabel}</strong> son sync</div>
-  `;
-}
-
-function setFilter(f, btn) {
-  filter = f;
-  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderTodos();
-}
-
-// ── SYNC INDICATOR ──
-function setSyncing(val) {
-  syncing = val;
-  const el = document.getElementById('sync-indicator');
-  if (el) el.innerHTML = val ? '<span class="sync-dot"></span>' : '';
-}
-
-// ── TOAST ──
-function toast(msg, type = '') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'toast show ' + type;
-  clearTimeout(el._t);
-  el._t = setTimeout(() => el.className = 'toast', 2800);
-}
-
-// ── SETTINGS ──
-function showSettings() {
-  document.getElementById('settings-modal').classList.add('open');
-}
-function closeSettings() {
-  document.getElementById('settings-modal').classList.remove('open');
-}
-
-// ── PWA ──
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
-  deferredPrompt = e;
+  window.deferredTodoPrompt = e;
   if (!localStorage.getItem('install_dismissed')) {
     document.getElementById('install-banner').classList.add('visible');
   }
 });
 
 function installApp() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(c => {
-      if (c.outcome === 'accepted') toast('Tətbiq yükləndi ✓', 'success');
+  if (window.deferredTodoPrompt) {
+    window.deferredTodoPrompt.prompt();
+    window.deferredTodoPrompt.userChoice.then(choice => {
+      if (choice.outcome === 'accepted' && window.toast) {
+        toast('Tətbiq yükləndi ✓', 'success');
+      }
       dismissInstall();
     });
   }
@@ -931,52 +864,7 @@ function dismissInstall() {
   localStorage.setItem('install_dismissed', '1');
   document.getElementById('install-banner').classList.remove('visible');
 }
-
-// ── AUTO-RESIZE TEXTAREA ──
-document.getElementById('add-input').addEventListener('input', function() {
-  this.style.height = 'auto';
-  this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-});
-
-document.getElementById('add-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    addTodo();
-  }
-});
-
-document.getElementById('search-input').addEventListener('input', function(e) {
-  searchTerm = e.target.value;
-  renderTodos();
-});
-
-window.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible' && getToken() && navigator.onLine && !syncing) {
-    loadTodos({ silent: true });
-  }
-});
-
-window.addEventListener('online', () => {
-  if (getToken() && !syncing) {
-    toast('Bağlantı bərpa olundu, sinxronizasiya edilir...', 'success');
-    loadTodos({ silent: true });
-  }
-});
-
-// ── HELPERS ──
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// Close modals on overlay click
-document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', e => {
-    if (e.target === el) {
-      el.classList.remove('open');
-      editId = null;
-    }
-  });
-});
 </script>
+<script src="./app.js"></script>
 </body>
 </html>
