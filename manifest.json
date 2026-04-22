@@ -1,0 +1,19 @@
+{
+  "name": "Todo — Mursal",
+  "short_name": "Todo",
+  "description": "Şəxsi tapşırıq siyahısı",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0f0f13",
+  "theme_color": "#0f0f13",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%230f0f13'/%3E%3Crect x='120' y='140' width='272' height='36' rx='18' fill='%23c8ff57'/%3E%3Crect x='120' y='210' width='200' height='36' rx='18' fill='%23ffffff' opacity='0.3'/%3E%3Crect x='120' y='280' width='240' height='36' rx='18' fill='%23ffffff' opacity='0.3'/%3E%3Crect x='120' y='350' width='180' height='36' rx='18' fill='%23ffffff' opacity='0.3'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "utilities"]
+}

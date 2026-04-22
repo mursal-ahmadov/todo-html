@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f0f13">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Todo">
+<link rel="manifest" href="manifest.json">
+<title>Todo</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f13;
+    --surface: #18181f;
+    --surface2: #22222c;
+    --border: rgba(255,255,255,0.07);
+    --accent: #c8ff57;
+    --accent-dim: rgba(200,255,87,0.12);
+    --text: #f0f0f0;
+    --text-muted: rgba(240,240,240,0.4);
+    --text-dim: rgba(240,240,240,0.65);
+    --danger: #ff5f57;
+    --done-color: rgba(240,240,240,0.25);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  html { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
+
+  body {
+    min-height: 100dvh;
+    background: var(--bg);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* ── SETUP SCREEN ── */
+  #setup-screen {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100dvh; padding: 32px 24px; gap: 32px;
+  }
+
+  .setup-logo { font-family: 'DM Serif Display', serif; font-size: 48px; color: var(--accent); line-height: 1; }
+  .setup-title { font-size: 22px; font-weight: 500; text-align: center; }
+  .setup-sub { font-size: 14px; color: var(--text-muted); text-align: center; line-height: 1.6; max-width: 320px; }
+
+  .setup-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px 24px; width: 100%; max-width: 400px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+
+  .setup-label { font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .setup-input {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 14px 16px;
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
+    width: 100%; outline: none; font-family: monospace;
+    transition: border-color 0.2s;
+  }
+  .setup-input:focus { border-color: var(--accent); }
+  .setup-input::placeholder { color: var(--text-muted); font-family: 'DM Sans', sans-serif; }
+
+  .setup-hint {
+    font-size: 12px; color: var(--text-muted); line-height: 1.5;
+  }
+  .setup-hint a { color: var(--accent); text-decoration: none; }
+
+  .btn-primary {
+    background: var(--accent); color: #0f0f13; font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 500; border: none; border-radius: var(--radius-sm);
+    padding: 14px 24px; cursor: pointer; width: 100%; transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-primary:active { transform: scale(0.98); }
+
+  /* ── MAIN APP ── */
+  #app { display: none; max-width: 600px; margin: 0 auto; padding: 0 0 120px; }
+
+  /* Header */
+  .app-header {
+    padding: 60px 24px 28px;
+    position: sticky; top: 0; z-index: 10;
+    background: linear-gradient(to bottom, var(--bg) 80%, transparent);
+  }
+
+  .header-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+
+  .header-title { font-family: 'DM Serif Display', serif; font-size: 36px; line-height: 1; }
+  .header-title span { color: var(--accent); }
+
+  .header-date { font-size: 12px; color: var(--text-muted); font-weight: 300; padding-bottom: 4px; }
+
+  .header-actions { display: flex; gap: 8px; }
+
+  .icon-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; color: var(--text-dim);
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .icon-btn:hover { background: var(--surface2); color: var(--text); }
+
+  /* Stats */
+  .stats-bar {
+    padding: 0 24px 20px; display: flex; gap: 12px;
+  }
+
+  .stat-pill {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 100px; padding: 6px 14px; font-size: 12px;
+    color: var(--text-dim); display: flex; align-items: center; gap: 6px;
+  }
+  .stat-pill strong { color: var(--text); font-weight: 500; }
+  .stat-pill.accent { background: var(--accent-dim); border-color: rgba(200,255,87,0.2); }
+  .stat-pill.accent strong { color: var(--accent); }
+
+  /* Filter tabs */
+  .filter-tabs {
+    padding: 0 24px 20px; display: flex; gap: 8px;
+  }
+
+  .filter-tab {
+    background: transparent; border: 1px solid var(--border);
+    border-radius: 100px; padding: 8px 16px;
+    color: var(--text-muted); font-family: 'DM Sans', sans-serif;
+    font-size: 13px; cursor: pointer; transition: all 0.2s;
+  }
+  .filter-tab:hover { border-color: rgba(255,255,255,0.2); color: var(--text-dim); }
+  .filter-tab.active {
+    background: var(--accent); border-color: var(--accent);
+    color: #0f0f13; font-weight: 500;
+  }
+
+  /* Todo list */
+  .todo-list { padding: 0 16px; display: flex; flex-direction: column; gap: 8px; }
+
+  .todo-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px;
+    display: flex; align-items: flex-start; gap: 12px;
+    animation: slideIn 0.25s ease; cursor: default;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .todo-item:hover { border-color: rgba(255,255,255,0.12); }
+  .todo-item.done { background: rgba(255,255,255,0.02); }
+  .todo-item.done .todo-text { color: var(--done-color); text-decoration: line-through; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .priority-bar {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    border-radius: 16px 0 0 16px;
+  }
+  .priority-bar.high { background: #ff5f57; }
+  .priority-bar.mid { background: #ffb347; }
+  .priority-bar.low { background: #57c8ff; }
+
+  .check-btn {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; cursor: pointer;
+    border: 1.5px solid rgba(255,255,255,0.2); background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; margin-top: 1px;
+  }
+  .check-btn:hover { border-color: var(--accent); }
+  .todo-item.done .check-btn {
+    background: var(--accent); border-color: var(--accent);
+  }
+  .check-btn svg { opacity: 0; transition: opacity 0.2s; }
+  .todo-item.done .check-btn svg { opacity: 1; }
+
+  .todo-content { flex: 1; min-width: 0; }
+
+  .todo-text {
+    font-size: 15px; line-height: 1.5; color: var(--text); word-break: break-word;
+    transition: color 0.2s;
+  }
+
+  .todo-meta {
+    display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap;
+  }
+
+  .todo-time { font-size: 11px; color: var(--text-muted); }
+
+  .todo-tag {
+    font-size: 11px; padding: 2px 8px; border-radius: 100px;
+    background: var(--surface2); color: var(--text-muted); font-weight: 400;
+  }
+
+  .todo-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.2s; }
+  .todo-item:hover .todo-actions { opacity: 1; }
+
+  .action-btn {
+    width: 28px; height: 28px; border-radius: 8px; cursor: pointer;
+    border: none; background: transparent; color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+  }
+  .action-btn:hover { background: var(--surface2); color: var(--text); }
+  .action-btn.delete:hover { background: rgba(255,95,87,0.12); color: var(--danger); }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center; padding: 64px 24px; color: var(--text-muted);
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  .empty-icon { font-size: 40px; opacity: 0.4; }
+  .empty-text { font-size: 15px; }
+
+  /* Add todo floating */
+  .add-area {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, var(--bg) 70%, transparent);
+    z-index: 20;
+  }
+
+  .add-inner {
+    max-width: 600px; margin: 0 auto;
+  }
+
+  .add-row {
+    display: flex; gap: 8px; align-items: flex-end;
+  }
+
+  .add-box {
+    flex: 1; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden; transition: border-color 0.2s;
+  }
+  .add-box:focus-within { border-color: rgba(200,255,87,0.4); }
+
+  .add-input {
+    background: transparent; border: none; outline: none;
+    width: 100%; padding: 14px 16px; color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+    resize: none; line-height: 1.4; max-height: 100px;
+  }
+  .add-input::placeholder { color: var(--text-muted); }
+
+  .add-options {
+    padding: 0 12px 10px; display: flex; align-items: center; gap: 8px;
+  }
+
+  .opt-select {
+    background: transparent; border: none; outline: none;
+    color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 12px;
+    cursor: pointer; padding: 4px 0;
+  }
+  .opt-select option { background: var(--surface2); color: var(--text); }
+
+  .opt-divider { width: 1px; height: 14px; background: var(--border); }
+
+  .add-btn {
+    width: 50px; height: 50px; border-radius: var(--radius); flex-shrink: 0;
+    background: var(--accent); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #0f0f13; transition: all 0.2s; align-self: flex-end;
+  }
+  .add-btn:hover { opacity: 0.88; transform: scale(1.04); }
+  .add-btn:active { transform: scale(0.96); }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 100px; padding: 10px 20px; font-size: 13px; color: var(--text);
+    z-index: 999; opacity: 0; transition: all 0.3s; white-space: nowrap;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.success { border-color: rgba(200,255,87,0.3); color: var(--accent); }
+  .toast.error { border-color: rgba(255,95,87,0.3); color: var(--danger); }
+
+  /* Install banner */
+  .install-banner {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    padding: 14px 20px; display: none; gap: 12px; align-items: center;
+    padding-top: calc(14px + env(safe-area-inset-top));
+  }
+  .install-banner.visible { display: flex; }
+  .install-banner-icon { font-size: 24px; }
+  .install-banner-text { flex: 1; }
+  .install-banner-title { font-size: 14px; font-weight: 500; }
+  .install-banner-sub { font-size: 12px; color: var(--text-muted); }
+  .install-btn {
+    background: var(--accent); color: #0f0f13; border: none;
+    border-radius: var(--radius-sm); padding: 8px 16px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .install-close {
+    background: none; border: none; color: var(--text-muted);
+    cursor: pointer; font-size: 18px; padding: 4px; flex-shrink: 0;
+  }
+
+  /* Sync indicator */
+  .sync-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); display: inline-block;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 50;
+    background: rgba(0,0,0,0.7); display: none;
+    align-items: center; justify-content: center; padding: 24px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px 24px; width: 100%; max-width: 400px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .modal-title { font-size: 18px; font-weight: 500; }
+  .modal-input {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 12px 14px;
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px;
+    width: 100%; outline: none;
+  }
+  .modal-input:focus { border-color: var(--accent); }
+  .modal-actions { display: flex; gap: 10px; }
+  .btn-secondary {
+    flex: 1; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 12px; color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer;
+  }
+
+  /* Loader */
+  .loader {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; padding: 40px; color: var(--text-muted); font-size: 14px;
+  }
+  .spinner {
+    width: 18px; height: 18px; border: 2px solid var(--border);
+    border-top-color: var(--accent); border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 480px) {
+    .app-header { padding-top: 48px; }
+    .header-title { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SETUP -->
+<div id="setup-screen">
+  <div>
+    <div class="setup-logo">✓</div>
+  </div>
+  <div style="text-align:center">
+    <div class="setup-title">Todo tətbiqi</div>
+    <div class="setup-sub" style="margin-top:8px">GitHub-da məlumatlarını saxlamaq üçün bir dəfə token daxil et</div>
+  </div>
+  <div class="setup-card">
+    <div class="setup-label">GitHub Personal Access Token</div>
+    <input type="password" class="setup-input" id="token-input" placeholder="ghp_xxxxxxxxxxxx">
+    <div class="setup-hint">
+      Token yaratmaq üçün: <a href="https://github.com/settings/tokens/new?scopes=repo&description=Todo+App" target="_blank">github.com/settings/tokens</a> → <strong>repo</strong> icazəsi seç
+    </div>
+    <button class="btn-primary" onclick="saveToken()">Daxil ol</button>
+  </div>
+  <div class="setup-hint" style="text-align:center; max-width:320px">
+    Token yalnız bu cihazda saxlanır. Heç bir serverə göndərilmir.
+  </div>
+</div>
+
+<!-- INSTALL BANNER -->
+<div class="install-banner" id="install-banner">
+  <div class="install-banner-icon">📱</div>
+  <div class="install-banner-text">
+    <div class="install-banner-title">Tətbiqi yüklə</div>
+    <div class="install-banner-sub">Ana ekranda app kimi istifadə et</div>
+  </div>
+  <button class="install-btn" onclick="installApp()">Yüklə</button>
+  <button class="install-close" onclick="dismissInstall()">✕</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <div class="app-header">
+    <div class="header-row">
+      <div>
+        <div class="header-title">Tapşırıqlar <span id="sync-indicator"></span></div>
+        <div class="header-date" id="header-date"></div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="refreshTodos()" title="Yenilə">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="icon-btn" onclick="showSettings()" title="Ayarlar">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="stats-bar" id="stats-bar" style="padding-left:0; padding-top:16px"></div>
+    <div class="filter-tabs" style="padding-left:0">
+      <button class="filter-tab active" onclick="setFilter('all', this)">Hamısı</button>
+      <button class="filter-tab" onclick="setFilter('active', this)">Aktiv</button>
+      <button class="filter-tab" onclick="setFilter('done', this)">Tamamlandı</button>
+    </div>
+  </div>
+
+  <div class="todo-list" id="todo-list">
+    <div class="loader"><div class="spinner"></div> Yüklənir...</div>
+  </div>
+</div>
+
+<!-- ADD AREA -->
+<div class="add-area" id="add-area" style="display:none">
+  <div class="add-inner">
+    <div class="add-row">
+      <div class="add-box">
+        <textarea class="add-input" id="add-input" placeholder="Yeni tapşırıq əlavə et..." rows="1"></textarea>
+        <div class="add-options">
+          <select class="opt-select" id="priority-select">
+            <option value="low">🔵 Aşağı</option>
+            <option value="mid" selected>🟡 Orta</option>
+            <option value="high">🔴 Yüksək</option>
+          </select>
+          <div class="opt-divider"></div>
+          <input class="opt-select" type="text" id="tag-input" placeholder="#etiket" style="font-size:12px; width:80px; font-family:'DM Sans',sans-serif;">
+        </div>
+      </div>
+      <button class="add-btn" onclick="addTodo()">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-title">Tapşırığı düzəlt</div>
+    <textarea class="modal-input" id="edit-input" rows="3" style="resize:none;line-height:1.5"></textarea>
+    <div style="display:flex;gap:8px">
+      <select class="modal-input" id="edit-priority" style="flex:1">
+        <option value="low">🔵 Aşağı</option>
+        <option value="mid">🟡 Orta</option>
+        <option value="high">🔴 Yüksək</option>
+      </select>
+      <input class="modal-input" type="text" id="edit-tag" placeholder="#etiket" style="flex:1">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeEditModal()">Ləğv et</button>
+      <button class="btn-primary" style="flex:1" onclick="saveEdit()">Saxla</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal">
+    <div class="modal-title">Ayarlar</div>
+    <div>
+      <div class="setup-label" style="margin-bottom:8px">GitHub Token</div>
+      <input type="password" class="modal-input" id="settings-token" placeholder="Yeni token daxil et">
+    </div>
+    <div style="font-size:12px; color:var(--text-muted)">
+      Repo: <strong style="color:var(--text)">mursal-ahmadov/todo-html</strong><br>
+      Məlumatlar: <strong style="color:var(--text)">/data/todos.json</strong>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeSettings()">Bağla</button>
+      <button class="btn-primary" style="flex:1" onclick="updateToken()">Yadda saxla</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CONFIG ──
+const REPO = 'mursal-ahmadov/todo-html';
+const FILE = 'data/todos.json';
+const API  = `https://api.github.com/repos/${REPO}/contents/${FILE}`;
+
+// ── STATE ──
+let todos = [];
+let fileSha = null;
+let filter  = 'all';
+let editId  = null;
+let deferredPrompt = null;
+let syncing = false;
+
+// ── INIT ──
+window.addEventListener('load', () => {
+  registerSW();
+  setDate();
+
+  const token = getToken();
+  if (token) {
+    showApp();
+    loadTodos();
+  }
+});
+
+function registerSW() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+}
+
+function setDate() {
+  const el = document.getElementById('header-date');
+  if (el) {
+    el.textContent = new Date().toLocaleDateString('az-AZ', { weekday:'long', day:'numeric', month:'long' });
+  }
+}
+
+// ── TOKEN ──
+function getToken() { return localStorage.getItem('gh_token'); }
+function setToken(t) { localStorage.setItem('gh_token', t); }
+
+function saveToken() {
+  const t = document.getElementById('token-input').value.trim();
+  if (!t) return toast('Token daxil et', 'error');
+  setToken(t);
+  showApp();
+  loadTodos();
+}
+
+function showApp() {
+  document.getElementById('setup-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('add-area').style.display = 'block';
+}
+
+function updateToken() {
+  const t = document.getElementById('settings-token').value.trim();
+  if (t) { setToken(t); toast('Token yeniləndi ✓', 'success'); }
+  closeSettings();
+}
+
+// ── GITHUB API ──
+async function ghFetch(method, body) {
+  const token = getToken();
+  const opts = {
+    method,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/vnd.github+json'
+    }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(API, opts);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+async function loadTodos() {
+  setSyncing(true);
+  try {
+    const data = await ghFetch('GET');
+    fileSha = data.sha;
+    const content = atob(data.content.replace(/\n/g, ''));
+    todos = JSON.parse(content);
+  } catch(e) {
+    if (e.message && e.message.includes('404')) {
+      // File doesn't exist yet, create it
+      todos = [];
+      await saveTodos(true);
+    } else {
+      toast('Yüklənmə xətası: ' + e.message, 'error');
+    }
+  }
+  setSyncing(false);
+  renderTodos();
+  renderStats();
+}
+
+async function saveTodos(silent = false) {
+  if (!silent) setSyncing(true);
+  try {
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(todos, null, 2))));
+    const body = {
+      message: `Todo yeniləndi — ${new Date().toLocaleString('az-AZ')}`,
+      content,
+    };
+    if (fileSha) body.sha = fileSha;
+    const res = await ghFetch('PUT', body);
+    fileSha = res.content.sha;
+    if (!silent) toast('Yadda saxlandı ✓', 'success');
+  } catch(e) {
+    toast('Saxlama xətası: ' + e.message, 'error');
+  }
+  if (!silent) setSyncing(false);
+}
+
+// ── CRUD ──
+async function addTodo() {
+  const input = document.getElementById('add-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const priority = document.getElementById('priority-select').value;
+  const tag = document.getElementById('tag-input').value.trim().replace(/^#/, '');
+
+  const todo = {
+    id: Date.now().toString(),
+    text,
+    done: false,
+    priority,
+    tag: tag || null,
+    createdAt: new Date().toISOString()
+  };
+
+  todos.unshift(todo);
+  input.value = '';
+  document.getElementById('tag-input').value = '';
+  input.style.height = 'auto';
+
+  renderTodos();
+  renderStats();
+  await saveTodos();
+}
+
+async function toggleTodo(id) {
+  const t = todos.find(t => t.id === id);
+  if (!t) return;
+  t.done = !t.done;
+  renderTodos();
+  renderStats();
+  await saveTodos();
+}
+
+async function deleteTodo(id) {
+  todos = todos.filter(t => t.id !== id);
+  renderTodos();
+  renderStats();
+  await saveTodos();
+}
+
+function openEdit(id) {
+  const t = todos.find(t => t.id === id);
+  if (!t) return;
+  editId = id;
+  document.getElementById('edit-input').value = t.text;
+  document.getElementById('edit-priority').value = t.priority;
+  document.getElementById('edit-tag').value = t.tag ? '#' + t.tag : '';
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+async function saveEdit() {
+  const text = document.getElementById('edit-input').value.trim();
+  if (!text) return;
+  const t = todos.find(t => t.id === editId);
+  if (!t) return;
+  t.text = text;
+  t.priority = document.getElementById('edit-priority').value;
+  const tag = document.getElementById('edit-tag').value.trim().replace(/^#/, '');
+  t.tag = tag || null;
+  closeEditModal();
+  renderTodos();
+  await saveTodos();
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').classList.remove('open');
+  editId = null;
+}
+
+async function refreshTodos() { await loadTodos(); }
+
+// ── RENDER ──
+function getFiltered() {
+  if (filter === 'active') return todos.filter(t => !t.done);
+  if (filter === 'done')   return todos.filter(t => t.done);
+  return todos;
+}
+
+function renderTodos() {
+  const list = document.getElementById('todo-list');
+  const filtered = getFiltered();
+
+  if (!filtered.length) {
+    const msgs = { all: 'Heç bir tapşırıq yoxdur', active: 'Aktiv tapşırıq yoxdur', done: 'Tamamlanan yoxdur' };
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">✦</div><div class="empty-text">${msgs[filter]}</div></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(t => {
+    const time = new Date(t.createdAt).toLocaleDateString('az-AZ', { day:'numeric', month:'short' });
+    const tagEl = t.tag ? `<span class="todo-tag">#${t.tag}</span>` : '';
+    return `
+    <div class="todo-item ${t.done ? 'done' : ''}">
+      <div class="priority-bar ${t.priority}"></div>
+      <button class="check-btn" onclick="toggleTodo('${t.id}')">
+        <svg width="12" height="12" fill="none" stroke="#0f0f13" stroke-width="2.5" viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </button>
+      <div class="todo-content">
+        <div class="todo-text">${escHtml(t.text)}</div>
+        <div class="todo-meta">
+          <span class="todo-time">${time}</span>
+          ${tagEl}
+        </div>
+      </div>
+      <div class="todo-actions">
+        <button class="action-btn" onclick="openEdit('${t.id}')" title="Düzəlt">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </button>
+        <button class="action-btn delete" onclick="deleteTodo('${t.id}')" title="Sil">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6m5 0V4h4v2"/>
+          </svg>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderStats() {
+  const total = todos.length;
+  const done  = todos.filter(t => t.done).length;
+  const active = total - done;
+  const el = document.getElementById('stats-bar');
+  el.innerHTML = `
+    <div class="stat-pill accent"><strong>${active}</strong> aktiv</div>
+    <div class="stat-pill"><strong>${done}</strong> tamamlandı</div>
+    <div class="stat-pill"><strong>${total}</strong> cəmi</div>
+  `;
+}
+
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTodos();
+}
+
+// ── SYNC INDICATOR ──
+function setSyncing(val) {
+  syncing = val;
+  const el = document.getElementById('sync-indicator');
+  if (el) el.innerHTML = val ? '<span class="sync-dot"></span>' : '';
+}
+
+// ── TOAST ──
+function toast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show ' + type;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.className = 'toast', 2800);
+}
+
+// ── SETTINGS ──
+function showSettings() {
+  document.getElementById('settings-modal').classList.add('open');
+}
+function closeSettings() {
+  document.getElementById('settings-modal').classList.remove('open');
+}
+
+// ── PWA ──
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!localStorage.getItem('install_dismissed')) {
+    document.getElementById('install-banner').classList.add('visible');
+  }
+});
+
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(c => {
+      if (c.outcome === 'accepted') toast('Tətbiq yükləndi ✓', 'success');
+      dismissInstall();
+    });
+  }
+}
+
+function dismissInstall() {
+  localStorage.setItem('install_dismissed', '1');
+  document.getElementById('install-banner').classList.remove('visible');
+}
+
+// ── AUTO-RESIZE TEXTAREA ──
+document.getElementById('add-input').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+});
+
+document.getElementById('add-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    addTodo();
+  }
+});
+
+// ── HELPERS ──
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => {
+    if (e.target === el) {
+      el.classList.remove('open');
+      editId = null;
+    }
+  });
+});
+</script>
+</body>
+</html>
